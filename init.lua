@@ -1,4 +1,5 @@
 -- 基本設定
+vim.opt.shell = "/bin/zsh"
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
