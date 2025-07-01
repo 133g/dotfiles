@@ -1,0 +1,19 @@
+### all ignore ###
+/*
+/.**
+
+### not ignore ###
+!/bin/
+!/bin/**
+!/ghostty/
+!/ghostty/config
+!/nvim/init.vim
+!/nvim/lua/**
+!/sheldon/plugins.toml
+!/tmux/.tmux.conf
+!/zsh/.zshrc
+
+!/README.md
+!/LICENSE
+!.gitignore
+!.gitkeep
