@@ -12,23 +12,16 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- nvimプラグインの設定変更
--- NERDTreeは利用しない予定になるためコメントアウト
--- vim.g.NERDTreeMapOpenInTab = 'T'
-
 -- nvimプラグインの読込
 require("lazy").setup({
-  "preservim/nerdtree",
 })
 
-vim.keymap.set('n', '<C-t>', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
-
 -- 基本設定
-vim.opt.shell = "/bin/zsh"
+-- vim.opt.shell = "/bin/zsh"
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
-vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- 全角文字表示設定
 vim.opt.ambiwidth = 'double'
