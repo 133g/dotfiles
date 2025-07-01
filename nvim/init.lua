@@ -1,8 +1,40 @@
+-- lazy.nvimのセットアップ
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- nvimプラグインの設定変更
+-- NERDTreeは利用しない予定になるためコメントアウト
+-- vim.g.NERDTreeMapOpenInTab = 'T'
+
+-- nvimプラグインの読込
+require("lazy").setup({
+  "preservim/nerdtree",
+})
+
+vim.keymap.set('n', '<C-t>', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
+
 -- 基本設定
 vim.opt.shell = "/bin/zsh"
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
+vim.opt.number = true
+
+-- 全角文字表示設定
+vim.opt.ambiwidth = 'double'
+
+vim.opt.list = true
+vim.opt.listchars = 'tab:>-', 'trail:*', 'nbsp:+'
 
 -- クリップボードをシステムと共有
 vim.opt.clipboard = 'unnamedplus'
