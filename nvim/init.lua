@@ -1,21 +1,4 @@
--- lazy.nvimのセットアップ
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
--- nvimプラグインの読込
-require("lazy").setup({
-  "EdenEast/nightfox.nvim"
-})
+require("config.lazy")
 
 -- 基本設定
 -- vim.opt.shell = "/bin/zsh"
@@ -214,5 +197,3 @@ if vim.fn.executable('im-select') == 1 then
   })
 end
 
--- 初期化完了通知
-vim.notify('initialization completed')
