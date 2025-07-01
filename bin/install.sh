@@ -16,11 +16,12 @@ link_to_homedir() {
 
   # ソース → リンク先のマッピング定義
   declare -A links=(
+    # TODO: ghosttyはwsl2では不要
     ["$dotdir/ghostty"]="$HOME/Library/Application Support/com.mitchellh.ghostty"
     ["$dotdir/nvim"]="$HOME/.config/nvim"
     ["$dotdir/sheldon"]="$HOME/.config/sheldon"
-    ["$dotdir/tmux"]="$HOME"
-    ["$dotdir/zsh"]="$HOME"
+    ["$dotdir/tmux/.tmux.conf"]="$HOME/.tmux.conf"
+    ["$dotdir/zsh/.zshrc"]="$HOME/.zshrc"
   )
 
   for src in "${!links[@]}"; do
@@ -34,6 +35,7 @@ link_to_homedir() {
       echo "  Removing existing symlink at $dest"
       rm -f "$dest"
     elif [ -e "$dest" ]; then
+      # TODO:ホームディレクトリ直下をさしているときにdistがそのディレクトリ自身になっているためmvが失敗する
       echo "  Backing up $dest to $backup_dir"
       mv -f "$dest" "$backup_dir/"
     fi
