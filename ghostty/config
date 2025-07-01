@@ -1,0 +1,9 @@
+theme = nordfox
+
+macos-titlebar-proxy-icon = hidden
+
+macos-titlebar-style = hidden
+
+window-padding-y = 10
+
+background-opacity = 0.8

@@ -14,6 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- nvimプラグインの読込
 require("lazy").setup({
+  "EdenEast/nightfox.nvim"
 })
 
 -- 基本設定
