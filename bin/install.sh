@@ -1,31 +1,55 @@
 #!/usr/bin/env bash
-set -ue
 
 link_to_homedir() {
-  command echo "backup old dotfiles..."
-  if [ ! -d "$HOME/.dotbackup" ];then
-    command echo "$HOME/.dotbackup not found. Auto Make it"
-    command mkdir "$HOME/.dotbackup"
+  echo "Installing dotfiles..."
+
+  # バックアップ先ディレクトリ
+  local backup_dir="$HOME/.dotbackup"
+  if [ ! -d "$backup_dir" ]; then
+    echo "$backup_dir not found. Creating it..."
+    mkdir -p "$backup_dir"
   fi
 
+  # 実行スクリプトのディレクトリとdotfilesルート
   local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-  local dotdir=$(dirname ${script_dir})
-  if [[ "$HOME" != "$dotdir" ]];then
-    for f in $dotdir/.??*; do
-      [[ `basename $f` == ".git" ]] && continue
-      if [[ -L "$HOME/`basename $f`" ]];then
-        command rm -f "$HOME/`basename $f`"
-      fi
-      if [[ -e "$HOME/`basename $f`" ]];then
-        command mv "$HOME/`basename $f`" "$HOME/.dotbackup"
-      fi
-      command ln -snf $f $HOME
-    done
-  else
-    command echo "same install src dest"
-  fi
+  local dotdir="$(dirname "$script_dir")"
+
+  # ソース → リンク先のマッピング定義
+  declare -A links=(
+    ["$dotdir/ghostty"]="$HOME/Library/Application Support/com.mitchellh.ghostty"
+    ["$dotdir/nvim"]="$HOME/.config/nvim"
+    ["$dotdir/sheldon"]="$HOME/.config/sheldon"
+    ["$dotdir/tmux"]="$HOME"
+    ["$dotdir/zsh"]="$HOME"
+  )
+
+  for src in "${!links[@]}"; do
+    dest="${links[$src]}"
+    dest_dir="$(dirname "$dest")"
+
+    echo "Processing: $src → $dest"
+
+    # 既存ファイル/リンクがあればバックアップまたは削除
+    if [ -L "$dest" ]; then
+      echo "  Removing existing symlink at $dest"
+      rm -f "$dest"
+    elif [ -e "$dest" ]; then
+      echo "  Backing up $dest to $backup_dir"
+      mv -f "$dest" "$backup_dir/"
+    fi
+
+    # 親ディレクトリを作成
+    if [ ! -d "$dest_dir" ]; then
+      echo "  Creating parent directory: $dest_dir"
+      mkdir -p "$dest_dir"
+    fi
+
+    # シンボリックリンク作成
+    echo "  Linking $src → $dest"
+    ln -snf "$src" "$dest"
+  done
+
+  echo "✅ Installation complete!"
 }
 
 link_to_homedir
-
-
