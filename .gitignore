@@ -10,8 +10,8 @@
 !/nvim/init.vim
 !/nvim/lua/**
 !/sheldon/plugins.toml
-!/tmux/.tmux.conf
-!/zsh/.zshrc
+!/tmux/**
+!/zsh/**
 
 !/README.md
 !/LICENSE
