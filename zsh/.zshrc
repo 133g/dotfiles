@@ -1,3 +1,6 @@
+if [[ "$(uname)" == "Linux" ]]; then
+  export PATH=$PATH:$HOME/.local/bin
+fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -45,8 +48,16 @@ alias view="nvim -R"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# setting for mise
-eval "$(/opt/homebrew/bin/mise activate zsh)"
+# setting for linux(WSL)
+if [[ "$(uname)" == "Linux" ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate zsh)"
+fi
+
+# setting for macOS
+if [[ "$(uname)" == "Darwin" ]]; then
+  eval "$(/opt/homebrew/bin/mise activate zsh)"
+fi
 
 # XDG Base Directory対応
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
