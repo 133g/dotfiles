@@ -10,6 +10,7 @@
 !/nvim/init.vim
 !/nvim/lua/**
 !/sheldon/plugins.toml
+!/tmux/
 !/tmux/**
 !/zsh/**
 
