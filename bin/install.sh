@@ -81,6 +81,7 @@ link_to_homedir() {
     "$dotdir/sheldon:$HOME/.config/sheldon"
     "$dotdir/tmux:$HOME/.config/tmux"
     "$dotdir/zsh:$HOME/.config/zsh"
+    "$dotdir/p10k:$HOME/.config/p10k"
   )
 
   # OS/環境固有の設定を追加

@@ -44,8 +44,8 @@ alias vi="nvim"
 alias vim="nvim"
 alias view="nvim -R"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ~/.config/p10k/p10k.zsh.
+[[ ! -f "${XDG_CONFIG_HOME}/p10k/p10k.zsh" ]] || source "${XDG_CONFIG_HOME}/p10k/p10k.zsh"
 
 # setting for linux(WSL)
 if [[ "$(uname)" == "Linux" ]]; then
