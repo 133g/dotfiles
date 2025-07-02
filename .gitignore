@@ -9,6 +9,8 @@
 !/ghostty/config
 !/nvim/init.vim
 !/nvim/lua/**
+!/p10k/
+!/p10k/**
 !/sheldon/plugins.toml
 !/tmux/
 !/tmux/**
