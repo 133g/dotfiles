@@ -1,5 +1,7 @@
 theme = nordfox
 
+font-family = "Nerd Font"
+
 macos-titlebar-proxy-icon = hidden
 
 macos-titlebar-style = hidden

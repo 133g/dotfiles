@@ -44,3 +44,14 @@ alias view="nvim -R"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# setting for mise
+eval "$(/opt/homebrew/bin/mise activate zsh)"
+
+# XDG Base Directory対応
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+
+# tmux XDG対応 - 設定ファイルパスを指定
+alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/tmux.conf"'
+
