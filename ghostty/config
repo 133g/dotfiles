@@ -1,6 +1,7 @@
 theme = nordfox
 
 font-family = "Hack Nerd Font Mono"
+font-feature = -dlig
 
 macos-titlebar-proxy-icon = hidden
 
