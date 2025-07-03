@@ -14,7 +14,19 @@ macOS、Linux、WSL2に対応したモダンなdotfiles構成。XDG Base Directo
 
 ```
 dotfiles/
-├── nvim/           # Neovim設定（lazy.nvim + nordfox）
+├── nvim/               # Neovim設定（lazy.nvim + nordfox）
+│   ├── init.lua
+│   └── lua/config/
+│       ├── options.lua     # 基本設定
+│       ├── keymaps.lua     # キーマップ管理
+│       ├── keymaps/        # キーマップ詳細設定
+│       │   ├── common.lua      # 共通機能
+│       │   ├── vscode.lua      # VSCode専用設定
+│       │   ├── onishi.lua      # 大西配列
+│       │   └── qwerty.lua      # QWERTY配列
+│       ├── ime.lua         # IME設定
+│       ├── wsl.lua         # WSL2設定
+│       └── lazy.lua        # プラグイン管理
 ├── zsh/            # Zsh設定（Sheldon + Powerlevel10k）
 ├── tmux/           # Tmux設定（カスタムキーバインド）
 ├── sheldon/        # Zsh plugin manager設定
@@ -63,8 +75,21 @@ cd ~/.dotfiles
 ### Neovim
 - **プラグイン管理**: lazy.nvim
 - **カラーテーマ**: nordfox
-- **キーマッピング**: k=左、t=下、n=上、s=右
+- **キーマッピング**: 大西配列（k=左、t=下、n=上、s=右）とQWERTY配列の切り替え対応
 - **VSCode統合**: Neovim拡張との連携機能
+
+#### キーマップ切り替え機能
+
+Neovimでは以下のコマンドでキーマップを切り替えできます：
+
+| コマンド | 機能 |
+|----------|------|
+| `:ToggleKeymap` | 大西配列 ⇔ QWERTY配列のトグル |
+| `:KeymapOnishi` | 大西配列に設定 |
+| `:KeymapQwerty` | QWERTY配列に設定 |
+| `:KeymapStatus` | 現在の配列状態を表示 |
+
+設定は自動的に保存され、次回起動時に復元されます。
 
 ### Zsh
 - **プラグイン管理**: Sheldon
@@ -85,6 +110,59 @@ cd ~/.dotfiles
 - **WSL2対応**: クリップボード統合とWindows連携機能
 
 ## カスタマイズ
+
+### Neovimキーマップのカスタマイズ
+
+#### 新しいキーマップの追加
+通常のキーマップを追加する場合は、各配列ファイルに設定を追加します：
+
+```lua
+-- ~/.config/nvim/lua/config/keymaps/onishi.lua または qwerty.lua
+local onishi_config = {
+  -- 新しいキーマップを追加
+  normal = {
+    ['n'] = 'up',
+    ['t'] = 'down',
+    -- 新しいマッピングをここに追加
+    ['<leader>f'] = 'find_files',
+  },
+  -- ...
+}
+```
+
+#### 配列に依存しないキーマップの追加
+両配列で共通のキーマップは `keymaps.lua` に直接追加：
+
+```lua
+-- ~/.config/nvim/lua/config/keymaps.lua
+-- 起動時の初期化の後に追加
+vim.keymap.set('n', '<leader>w', ':w<CR>', { silent = true })
+```
+
+#### 新しい配列の追加
+1. `keymaps/` ディレクトリに新しいファイルを作成
+2. 設定テーブルを定義
+3. `keymaps.lua` で新しい配列を登録
+
+```lua
+-- 例: ~/.config/nvim/lua/config/keymaps/dvorak.lua
+local common = require('config.keymaps.common')
+local vscode = require('config.keymaps.vscode')
+
+local dvorak_config = {
+  -- 設定を定義
+}
+
+return {
+  setup = function()
+    vscode.setup_keymaps(dvorak_config)
+    common.setup_neovim_keymaps(dvorak_config)
+  end,
+  clear = function()
+    -- キーの削除
+  end
+}
+```
 
 ### ローカル設定
 各ツールのローカル設定用ファイルを作成できます：
