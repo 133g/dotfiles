@@ -7,8 +7,10 @@
 !/bin/**
 !/ghostty/
 !/ghostty/config
-!/nvim/init.vim
-!/nvim/lua/**
+!/nvim/
+!/nvim/**
+# lazy.nvim lock file should be ignored
+/nvim/lazy-lock.json
 !/p10k/
 !/p10k/**
 !/sheldon/plugins.toml
