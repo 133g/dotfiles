@@ -23,7 +23,10 @@ function M.normal_move(direction)
     return nil
   end
   
-  local vscode = require('vscode-neovim')
+  local ok, vscode = pcall(require, 'vscode-neovim')
+  if not ok then
+    return nil
+  end
   return function()
     local cmd_args = nil
     
@@ -57,7 +60,10 @@ function M.visual_move(direction)
     return nil
   end
   
-  local vscode = require('vscode-neovim')
+  local ok, vscode = pcall(require, 'vscode-neovim')
+  if not ok then
+    return nil
+  end
   return function()
     local cmd_args = nil
     
