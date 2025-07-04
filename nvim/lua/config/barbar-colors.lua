@@ -10,58 +10,86 @@ function M.setup()
   
   local nordfox = palette.load("nordfox")
   
-  -- NordFoxテーマに適合するタブの色設定
-  local highlights = {
-    -- アクティブタブ（現在のバッファ）
-    BufferCurrent = { fg = nordfox.fg1, bg = nordfox.bg1, bold = true },
-    BufferCurrentERROR = { fg = nordfox.red.base, bg = nordfox.bg1 },
-    BufferCurrentHINT = { fg = nordfox.cyan.base, bg = nordfox.bg1 },
-    BufferCurrentINFO = { fg = nordfox.blue.base, bg = nordfox.bg1 },
-    BufferCurrentWARN = { fg = nordfox.yellow.base, bg = nordfox.bg1 },
-    BufferCurrentIndex = { fg = nordfox.blue.base, bg = nordfox.bg1, bold = true },
-    BufferCurrentMod = { fg = nordfox.orange.base, bg = nordfox.bg1, bold = true },
-    BufferCurrentSign = { fg = nordfox.blue.base, bg = nordfox.bg1 },
-    BufferCurrentTarget = { fg = nordfox.red.base, bg = nordfox.bg1, bold = true },
-    BufferCurrentIcon = { fg = nordfox.fg1, bg = nordfox.bg1 },
-    BufferCurrentButton = { fg = nordfox.red.base, bg = nordfox.bg1 },
-    BufferCurrentPin = { fg = nordfox.magenta.base, bg = nordfox.bg1 },
-    BufferCurrentSeparator = { fg = nordfox.bg0, bg = nordfox.bg1 },
-    
-    -- 非アクティブなタブ（より濃い背景色）
-    BufferInactive = { fg = nordfox.fg3, bg = nordfox.bg0 },
-    BufferInactiveERROR = { fg = nordfox.red.dim, bg = nordfox.bg0 },
-    BufferInactiveHINT = { fg = nordfox.cyan.dim, bg = nordfox.bg0 },
-    BufferInactiveINFO = { fg = nordfox.blue.dim, bg = nordfox.bg0 },
-    BufferInactiveWARN = { fg = nordfox.yellow.dim, bg = nordfox.bg0 },
-    BufferInactiveIndex = { fg = nordfox.fg3, bg = nordfox.bg0 },
-    BufferInactiveMod = { fg = nordfox.orange.dim, bg = nordfox.bg0 },
-    BufferInactiveSign = { fg = nordfox.fg3, bg = nordfox.bg0 },
-    BufferInactiveTarget = { fg = nordfox.red.dim, bg = nordfox.bg0 },
-    BufferInactiveIcon = { fg = nordfox.fg3, bg = nordfox.bg0 },
-    BufferInactiveButton = { fg = nordfox.red.dim, bg = nordfox.bg0 },
-    BufferInactivePin = { fg = nordfox.magenta.dim, bg = nordfox.bg0 },
-    BufferInactiveSeparator = { fg = nordfox.bg0, bg = nordfox.bg0 },
-    
-    -- 表示されているが非アクティブなタブ
-    BufferVisible = { fg = nordfox.fg2, bg = nordfox.sel0 },
-    BufferVisibleERROR = { fg = nordfox.red.base, bg = nordfox.sel0 },
-    BufferVisibleHINT = { fg = nordfox.cyan.base, bg = nordfox.sel0 },
-    BufferVisibleINFO = { fg = nordfox.blue.base, bg = nordfox.sel0 },
-    BufferVisibleWARN = { fg = nordfox.yellow.base, bg = nordfox.sel0 },
-    BufferVisibleIndex = { fg = nordfox.fg2, bg = nordfox.sel0 },
-    BufferVisibleMod = { fg = nordfox.orange.base, bg = nordfox.sel0 },
-    BufferVisibleSign = { fg = nordfox.fg2, bg = nordfox.sel0 },
-    BufferVisibleTarget = { fg = nordfox.red.base, bg = nordfox.sel0 },
-    BufferVisibleIcon = { fg = nordfox.fg2, bg = nordfox.sel0 },
-    BufferVisibleButton = { fg = nordfox.red.base, bg = nordfox.sel0 },
-    BufferVisiblePin = { fg = nordfox.magenta.base, bg = nordfox.sel0 },
-    BufferVisibleSeparator = { fg = nordfox.bg0, bg = nordfox.sel0 },
-    
-    -- タブライン本体
-    BufferTabpages = { fg = nordfox.fg3, bg = nordfox.bg0, bold = true },
-    BufferTabpageFill = { fg = nordfox.fg3, bg = nordfox.bg0 },
-    BufferOffset = { fg = nordfox.fg3, bg = nordfox.bg0 },
+  -- タブの状態別設定を定義
+  local buffer_states = {
+    Current = {
+      bg = nordfox.bg1,
+      fg_default = nordfox.fg1,
+      fg_dim = nordfox.fg1,
+      bold = true,
+      colors = {
+        red = nordfox.red.base,
+        cyan = nordfox.cyan.base,
+        blue = nordfox.blue.base,
+        yellow = nordfox.yellow.base,
+        orange = nordfox.orange.base,
+        magenta = nordfox.magenta.base,
+        green = nordfox.green.base,
+      }
+    },
+    Inactive = {
+      bg = nordfox.bg0,
+      fg_default = nordfox.fg3,
+      fg_dim = nordfox.fg3,
+      bold = false,
+      colors = {
+        red = nordfox.red.dim,
+        cyan = nordfox.cyan.dim,
+        blue = nordfox.blue.dim,
+        yellow = nordfox.yellow.dim,
+        orange = nordfox.orange.dim,
+        magenta = nordfox.magenta.dim,
+        green = nordfox.green.dim,
+      }
+    },
+    Visible = {
+      bg = nordfox.sel0,
+      fg_default = nordfox.fg2,
+      fg_dim = nordfox.fg2,
+      bold = false,
+      colors = {
+        red = nordfox.red.base,
+        cyan = nordfox.cyan.base,
+        blue = nordfox.blue.base,
+        yellow = nordfox.yellow.base,
+        orange = nordfox.orange.base,
+        magenta = nordfox.magenta.base,
+        green = nordfox.green.base,
+      }
+    }
   }
+  
+  -- NordFoxテーマに適合するタブの色設定
+  local highlights = {}
+  
+  -- 各状態に対するハイライト設定を生成
+  for state, config in pairs(buffer_states) do
+    local prefix = "Buffer" .. state
+    
+    highlights[prefix] = { fg = config.fg_default, bg = config.bg, bold = config.bold }
+    highlights[prefix .. "ERROR"] = { fg = config.colors.red, bg = config.bg }
+    highlights[prefix .. "HINT"] = { fg = config.colors.cyan, bg = config.bg }
+    highlights[prefix .. "INFO"] = { fg = config.colors.blue, bg = config.bg }
+    highlights[prefix .. "WARN"] = { fg = config.colors.yellow, bg = config.bg }
+    highlights[prefix .. "Index"] = { fg = config.colors.blue, bg = config.bg, bold = config.bold }
+    highlights[prefix .. "Mod"] = { fg = config.colors.orange, bg = config.bg, bold = config.bold }
+    highlights[prefix .. "Sign"] = { fg = (state == "Current") and config.colors.blue or config.fg_default, bg = config.bg }
+    highlights[prefix .. "Target"] = { fg = config.colors.red, bg = config.bg, bold = config.bold }
+    highlights[prefix .. "Icon"] = { fg = config.fg_default, bg = config.bg }
+    highlights[prefix .. "Button"] = { fg = config.colors.red, bg = config.bg }
+    highlights[prefix .. "Pin"] = { fg = config.colors.magenta, bg = config.bg }
+    highlights[prefix .. "Separator"] = { fg = nordfox.bg0, bg = config.bg }
+    
+    -- Git statusアイコンの背景色設定
+    highlights[prefix .. "Added"] = { fg = config.colors.green, bg = config.bg }
+    highlights[prefix .. "Changed"] = { fg = config.colors.orange, bg = config.bg }
+    highlights[prefix .. "Deleted"] = { fg = config.colors.red, bg = config.bg }
+  end
+  
+  -- タブライン本体
+  highlights.BufferTabpages = { fg = nordfox.fg3, bg = nordfox.bg0, bold = true }
+  highlights.BufferTabpageFill = { fg = nordfox.fg3, bg = nordfox.bg0 }
+  highlights.BufferOffset = { fg = nordfox.fg3, bg = nordfox.bg0 }
   
   -- ハイライトグループを設定
   for group, opts in pairs(highlights) do
@@ -75,24 +103,26 @@ function M.setup()
     for _, icon_data in pairs(icons) do
       if icon_data.name then
         local name = icon_data.name
-        -- アクティブタブのアイコン
-        vim.api.nvim_set_hl(0, 'BufferCurrent' .. name, { 
-          fg = icon_data.color or nordfox.fg1, 
-          bg = nordfox.bg1 
-        })
-        -- 非アクティブタブのアイコン
-        vim.api.nvim_set_hl(0, 'BufferInactive' .. name, { 
-          fg = icon_data.color or nordfox.fg3, 
-          bg = nordfox.bg0 
-        })
-        -- 表示中タブのアイコン
-        vim.api.nvim_set_hl(0, 'BufferVisible' .. name, { 
-          fg = icon_data.color or nordfox.fg2, 
-          bg = nordfox.sel0 
-        })
+        -- 各状態に対してアイコンの背景色を設定
+        for state, config in pairs(buffer_states) do
+          vim.api.nvim_set_hl(0, 'Buffer' .. state .. name, {
+            fg = icon_data.color or config.fg_default,
+            bg = config.bg
+          })
+        end
       end
     end
   end
 end
+
+-- オートコマンドでColorSchemeとVimEnterイベント時に色設定を適用
+vim.api.nvim_create_autocmd({"ColorScheme", "VimEnter"}, {
+  pattern = "*",
+  callback = function()
+    vim.schedule(function()
+      M.setup()
+    end)
+  end,
+})
 
 return M
