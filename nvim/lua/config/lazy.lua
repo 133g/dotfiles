@@ -18,6 +18,7 @@ require("lazy").setup({
     { import = "plugins.nightfox" },
     { import = "plugins.lualine" },
     { import = "plugins.barbar" },
+    { import = "plugins.oil" },
   }
 })
 
