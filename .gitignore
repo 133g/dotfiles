@@ -16,6 +16,11 @@
 
 # Claude configuration files with sensitive data
 /claude/discord-config.json
+/claude/.credentials.json
+/claude/statsig/
+/claude/projects/
+/claude/todos/
+/claude/*.backup
 !/p10k/
 !/p10k/**
 !/sheldon/plugins.toml
