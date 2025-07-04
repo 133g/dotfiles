@@ -80,7 +80,7 @@ cd ~/.dotfiles
 
 #### キーマップ切り替え機能
 
-Neovimでは以下のコマンドでキーマップを切り替えできます：
+以下のコマンドを使用してキーマップを切り替えます：
 
 | コマンド | 機能 |
 |----------|------|
@@ -114,7 +114,7 @@ Neovimでは以下のコマンドでキーマップを切り替えできます�
 ### Neovimキーマップのカスタマイズ
 
 #### 新しいキーマップの追加
-通常のキーマップを追加する場合は、各配列ファイルに設定を追加します：
+通常のキーマップを追加する場合は、各配列ファイルに設定を追加してください：
 
 ```lua
 -- ~/.config/nvim/lua/config/keymaps/onishi.lua または qwerty.lua
@@ -131,7 +131,7 @@ local onishi_config = {
 ```
 
 #### 配列に依存しないキーマップの追加
-両配列で共通のキーマップは `keymaps.lua` に直接追加：
+両配列で共通のキーマップは `keymaps.lua` に直接追加してください：
 
 ```lua
 -- ~/.config/nvim/lua/config/keymaps.lua
@@ -164,8 +164,73 @@ return {
 }
 ```
 
+#### Neovimプラグインの追加
+
+プラグインの追加方法は、設定の複雑さに応じて以下の2つの方法から選択してください：
+
+##### 設定が必要なプラグイン
+複雑な設定が必要なプラグインは個別ファイルで管理してください：
+
+1. `lua/plugins/` ディレクトリに新しいファイルを作成
+2. プラグイン設定を記述
+3. `lua/config/lazy.lua` にimportを追加
+
+```lua
+-- 例: lua/plugins/lualine.lua
+return {
+  "nvim-lualine/lualine.nvim",
+  config = function()
+    require('lualine').setup({
+      options = {
+        theme = 'nordfox',
+      },
+    })
+  end,
+}
+```
+
+```lua
+-- lua/config/lazy.lua に追加
+require("lazy").setup({
+  spec = {
+    { import = "plugins.nightfox" },
+    { import = "plugins.lualine" },  -- 新しいプラグインを追加
+  }
+})
+```
+
+##### 設定が不要なプラグイン
+設定が不要なプラグインは `lazy.lua` に直接追加してください：
+
+```lua
+-- lua/config/lazy.lua
+require("lazy").setup({
+  spec = {
+    -- 設定が必要なプラグイン（個別ファイル）
+    { import = "plugins.nightfox" },
+    { import = "plugins.lualine" },
+    
+    -- 設定が不要なプラグイン（直接追加）
+    { "vim-jp/vimdoc-ja" },
+    { "tpope/vim-sleuth" },
+    { "nvim-tree/nvim-web-devicons" },
+  }
+})
+```
+
+または、複数の軽量プラグインをまとめた専用ファイルを作成することも可能です：
+
+```lua
+-- lua/plugins/simple.lua
+return {
+  { "vim-jp/vimdoc-ja" },
+  { "tpope/vim-sleuth" },
+  { "nvim-tree/nvim-web-devicons" },
+}
+```
+
 ### ローカル設定
-各ツールのローカル設定用ファイルを作成できます：
+各ツールのローカル設定用ファイルを作成してください：
 
 ```bash
 # Zsh
@@ -179,7 +244,7 @@ return {
 ```
 
 ### 環境固有設定
-WSL2環境では追加の設定スクリプトが実行されます：
+WSL2環境では以下の追加設定スクリプトを実行してください：
 ```bash
 ./bin/setup-wsl2.sh
 ```
