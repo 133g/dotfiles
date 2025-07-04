@@ -22,8 +22,25 @@ fi
 # 標準入力からJSONデータを読み取り
 INPUT=$(cat)
 
-# イベントタイプを取得
-EVENT_TYPE=$(echo "$INPUT" | jq -r '.event // "unknown"')
+# デバッグ用: 受信したJSONをログに記録
+echo "DEBUG: Received JSON: $INPUT" >> /tmp/claude-hooks-debug.log
+
+# イベントタイプを推定（JSONの構造から判定）
+if echo "$INPUT" | jq -e '.hook_event_name' > /dev/null 2>&1; then
+    EVENT_TYPE=$(echo "$INPUT" | jq -r '.hook_event_name')
+    echo "DEBUG: Detected event type from .hook_event_name: $EVENT_TYPE" >> /tmp/claude-hooks-debug.log
+elif echo "$INPUT" | jq -e '.message' > /dev/null 2>&1; then
+    EVENT_TYPE="Notification"
+    echo "DEBUG: Detected as Notification (has .message)" >> /tmp/claude-hooks-debug.log
+elif echo "$INPUT" | jq -e '.event' > /dev/null 2>&1; then
+    EVENT_TYPE=$(echo "$INPUT" | jq -r '.event')
+    echo "DEBUG: Detected event type from .event field: $EVENT_TYPE" >> /tmp/claude-hooks-debug.log
+else
+    EVENT_TYPE="unknown"
+    echo "DEBUG: Could not detect event type, defaulting to unknown" >> /tmp/claude-hooks-debug.log
+fi
+
+echo "DEBUG: Final EVENT_TYPE: $EVENT_TYPE" >> /tmp/claude-hooks-debug.log
 
 # メッセージの構築
 case "$EVENT_TYPE" in

@@ -1,20 +1,26 @@
 {
-  "hooks": [
-    {
-      "matcher": {
-        "event": "Stop"
-      },
-      "hook": {
-        "command": "/Users/kmba/.claude/scripts/discord-notify.sh"
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/scripts/discord-notify.sh"
+          }
+        ]
       }
-    },
-    {
-      "matcher": {
-        "event": "Notification"
-      },
-      "hook": {
-        "command": "/Users/kmba/.claude/scripts/discord-notify.sh"
+    ],
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/scripts/discord-notify.sh"
+          }
+        ]
       }
-    }
-  ]
+    ]
+  }
 }

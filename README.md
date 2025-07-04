@@ -115,13 +115,22 @@ cd ~/.dotfiles
 
 ### Claude Code
 - **Discord通知**: Stop/Notificationイベント時の自動通知
-- **Hooks設定**: カスタムスクリプト実行システム
-- **セットアップスクリプト**: Discord Webhook URL設定支援
+- **Hooks設定**: 新フォーマット対応の自動設定システム
+- **セットアップスクリプト**: Discord Webhook URL設定 + hooks自動設定
+- **冪等性保証**: 既存hooks設定の保護・重複実行安全性
+- **インタラクティブテスト**: セットアップ時の通知動作確認
 
 #### Discord通知設定
 1. `~/.claude/scripts/setup-discord.sh`を実行
 2. Discord ServerでWebhook URLを作成・入力
-3. Claude Code停止時・通知時に自動でDiscordに通知
+3. **hooks設定が自動で構成される**（既存設定は保護）
+4. **セットアップ時にテスト通知を実行可能**
+5. Claude Code停止時・通知時に自動でDiscordに通知
+
+**特徴**:
+- **新hooks フォーマット対応**: Claude Code最新版の設定構造に対応
+- **環境非依存**: ハードコードパスを排除し任意の環境で動作
+- **安全な設定更新**: 他のhooks設定を上書きせずに部分更新
 
 ### その他
 - **日本語IME**: zenhan/im-selectによる自動切り替え（macOS）

@@ -50,8 +50,17 @@ alias view="nvim -R"
 
 # setting for linux(WSL)
 if [[ "$(uname)" == "Linux" ]]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate zsh)"
+  # Homebrewのパスを動的に検出
+  local brew_path="/home/linuxbrew/.linuxbrew/bin/brew"
+  if [[ -x "$brew_path" ]]; then
+    eval "$($brew_path shellenv)"
+  fi
+  
+  # miseのパスを動的に検出
+  local mise_path="/home/linuxbrew/.linuxbrew/bin/mise"
+  if [[ -x "$mise_path" ]]; then
+    eval "$($mise_path activate zsh)"
+  fi
 fi
 
 # setting for macOS
