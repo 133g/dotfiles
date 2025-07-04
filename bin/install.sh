@@ -82,6 +82,7 @@ link_to_homedir() {
     "$dotdir/tmux:$HOME/.config/tmux"
     "$dotdir/zsh:$HOME/.config/zsh"
     "$dotdir/p10k:$HOME/.config/p10k"
+    "$dotdir/claude:$HOME/.claude"
   )
 
   # OS/環境固有の設定を追加
@@ -255,6 +256,21 @@ export ZDOTDIR=\"\${XDG_CONFIG_HOME}/zsh\"
     print_success "zshブートストラップファイルを作成: $zshenv_path"
   else
     print_info "zshブートストラップファイルは既に存在します"
+  fi
+
+  # Claude設定の初期化
+  print_info "Claude設定を初期化中..."
+  local claude_config_example="$HOME/.claude/discord-config.json.example"
+  local claude_config="$HOME/.claude/discord-config.json"
+  
+  if [ -f "$claude_config_example" ] && [ ! -f "$claude_config" ]; then
+    cp "$claude_config_example" "$claude_config"
+    print_success "Claude Discord設定ファイルを作成: $claude_config"
+    print_info "Discord通知を使用する場合は、~/.claude/scripts/setup-discord.sh を実行してください"
+  elif [ ! -f "$claude_config_example" ]; then
+    print_warning "Claude設定のexampleファイルが見つかりません"
+  else
+    print_info "Claude Discord設定ファイルは既に存在します"
   fi
 
   # WSL2固有の追加設定

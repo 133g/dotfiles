@@ -27,6 +27,13 @@ dotfiles/
 │       ├── ime.lua         # IME設定
 │       ├── wsl.lua         # WSL2設定
 │       └── lazy.lua        # プラグイン管理
+├── claude/             # Claude Code hooks・スクリプト
+│   ├── settings.json       # hooks設定
+│   ├── discord-config.json.example  # Discord設定例
+│   ├── scripts/
+│   │   ├── discord-notify.sh   # Discord通知スクリプト
+│   │   └── setup-discord.sh    # セットアップスクリプト
+│   └── README.md       # Claude設定ドキュメント
 ├── zsh/            # Zsh設定（Sheldon + Powerlevel10k）
 ├── tmux/           # Tmux設定（カスタムキーバインド）
 ├── sheldon/        # Zsh plugin manager設定
@@ -66,6 +73,7 @@ cd ~/.dotfiles
 | `tmux/` | `~/.config/tmux/` | Tmux設定 |
 | `sheldon/` | `~/.config/sheldon/` | Zshプラグイン管理 |
 | `p10k/` | `~/.config/p10k/` | Powerlevel10kテーマ |
+| `claude/` | `~/.claude/` | Claude Code hooks・スクリプト |
 | `ghostty/`* | `~/Library/Application Support/com.mitchellh.ghostty` | Ghostty設定（macOSのみ） |
 
 *macOSでのみ作成されます
@@ -104,6 +112,16 @@ cd ~/.dotfiles
 - **キーマッピング**: Neovimと統一（k=左、t=下、n=上、s=右）
 - **テーマ**: nordfox
 - **XDG対応**: `~/.config/tmux/`に設定配置
+
+### Claude Code
+- **Discord通知**: Stop/Notificationイベント時の自動通知
+- **Hooks設定**: カスタムスクリプト実行システム
+- **セットアップスクリプト**: Discord Webhook URL設定支援
+
+#### Discord通知設定
+1. `~/.claude/scripts/setup-discord.sh`を実行
+2. Discord ServerでWebhook URLを作成・入力
+3. Claude Code停止時・通知時に自動でDiscordに通知
 
 ### その他
 - **日本語IME**: zenhan/im-selectによる自動切り替え（macOS）

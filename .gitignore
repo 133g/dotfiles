@@ -5,12 +5,17 @@
 ### not ignore ###
 !/bin/
 !/bin/**
+!/claude/
+!/claude/**
 !/ghostty/
 !/ghostty/config
 !/nvim/
 !/nvim/**
 # lazy.nvim lock file should be ignored
 /nvim/lazy-lock.json
+
+# Claude configuration files with sensitive data
+/claude/discord-config.json
 !/p10k/
 !/p10k/**
 !/sheldon/plugins.toml

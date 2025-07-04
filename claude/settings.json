@@ -1,0 +1,20 @@
+{
+  "hooks": [
+    {
+      "matcher": {
+        "event": "Stop"
+      },
+      "hook": {
+        "command": "/Users/kmba/.claude/scripts/discord-notify.sh"
+      }
+    },
+    {
+      "matcher": {
+        "event": "Notification"
+      },
+      "hook": {
+        "command": "/Users/kmba/.claude/scripts/discord-notify.sh"
+      }
+    }
+  ]
+}
