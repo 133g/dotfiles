@@ -6,9 +6,14 @@ M.is_vscode = vim.g.vscode ~= nil
 -- キーマップの削除用ヘルパー関数（キーマップ配列切り替え時の既存設定クリア用）
 function M.clear_keymaps(keys)
   for _, key in ipairs(keys) do
+    -- 基本キーマップの削除
     pcall(vim.keymap.del, 'n', key)  -- pcallでエラーを防ぎ安全に削除
     pcall(vim.keymap.del, 'v', key)
     pcall(vim.keymap.del, 'x', key)
+    
+    -- <C-w>キーマップの削除（ウィンドウ操作）
+    pcall(vim.keymap.del, 'n', "<C-w>"..key)
+    pcall(vim.keymap.del, 'v', "<C-w>"..key)
   end
 end
 

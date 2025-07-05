@@ -6,8 +6,19 @@ local qwerty = require('config.keymaps.qwerty')
 
 local M = {}
 
+-- ユーザー設定を読み込み
+local user_config = require('config.keymaps.user-config')
+
+-- coreモジュールの参照
+local core = require('config.keymaps.core')
+
 -- 現在の配列状態を管理
-local current_layout = vim.g.keymap_layout or 'onishi'
+local current_layout = vim.g.keymap_layout or user_config.layout_settings.default_layout
+
+-- coreモジュールの初期化
+core.init({
+  default_layout = current_layout
+})
 
 -- 配列の切り替え機能
 local function switch_layout(layout, is_initial)
@@ -23,6 +34,7 @@ local function switch_layout(layout, is_initial)
     onishi.setup()
     current_layout = 'onishi'
     vim.g.keymap_layout = 'onishi'
+    core.set_current_layout('onishi')  -- coreモジュールの状態も更新
     if is_initial then
       print('Keymap: Onishi')
     else
@@ -32,11 +44,17 @@ local function switch_layout(layout, is_initial)
     qwerty.setup()
     current_layout = 'qwerty'
     vim.g.keymap_layout = 'qwerty'
+    core.set_current_layout('qwerty')  -- coreモジュールの状態も更新
     if is_initial then
       print('Keymap: QWERTY')
     else
       print('Keymap: Switched to QWERTY')
     end
+  end
+  
+  -- 配列切り替え後にユーザーキーマップの再適用を促すイベントを発火
+  if not is_initial then
+    vim.api.nvim_exec_autocmds('User', { pattern = 'KeymapLayoutChanged' })
   end
 end
 
@@ -92,29 +110,31 @@ end
 
 -- 初期化関数（外部から呼び出し用）
 function M.init()
-  -- コマンドの登録
-  vim.api.nvim_create_user_command('ToggleKeymap', toggle_layout, {
-    desc = 'キーマップ配列を切り替え（大西配列 ⇔ QWERTY配列）'
-  })
+  -- 配列切り替え機能が有効な場合のみコマンドを登録
+  if user_config.layout_settings.enable_layout_switching then
+    vim.api.nvim_create_user_command('ToggleKeymap', toggle_layout, {
+      desc = 'キーマップ配列を切り替え（大西配列 ⇔ QWERTY配列）'
+    })
 
-  vim.api.nvim_create_user_command('KeymapOnishi', function()
-    switch_layout('onishi')
-  end, {
-    desc = 'キーマップを大西配列に設定'
-  })
+    vim.api.nvim_create_user_command('KeymapOnishi', function()
+      switch_layout('onishi')
+    end, {
+      desc = 'キーマップを大西配列に設定'
+    })
 
-  vim.api.nvim_create_user_command('KeymapQwerty', function()
-    switch_layout('qwerty')
-  end, {
-    desc = 'キーマップをQWERTY配列に設定'
-  })
+    vim.api.nvim_create_user_command('KeymapQwerty', function()
+      switch_layout('qwerty')
+    end, {
+      desc = 'キーマップをQWERTY配列に設定'
+    })
 
-  -- 現在の配列状態を表示
-  vim.api.nvim_create_user_command('KeymapStatus', function()
-    print('Keymap: ' .. current_layout:upper())
-  end, {
-    desc = 'Show current keymap layout'
-  })
+    -- 現在の配列状態を表示
+    vim.api.nvim_create_user_command('KeymapStatus', function()
+      print('Keymap: ' .. current_layout:upper())
+    end, {
+      desc = 'Show current keymap layout'
+    })
+  end
 
   -- 起動時の初期化
   switch_layout(current_layout, true)

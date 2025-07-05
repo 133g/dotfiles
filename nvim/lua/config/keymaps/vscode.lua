@@ -1,7 +1,10 @@
 local M = {}
 
+-- ユーザー設定を読み込み
+local user_config = require('config.keymaps.user-config')
+
 -- VSCode環境の判定
-M.is_vscode = vim.g.vscode ~= nil
+M.is_vscode = vim.g.vscode ~= nil and user_config.vscode_settings.enable_vscode_integration
 
 -- ビジュアルモード検出用のヘルパー関数
 function M.get_visual_mode()

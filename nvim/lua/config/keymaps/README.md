@@ -1,57 +1,70 @@
-# Neovim キーマップシステム
+# Neovim キーマップシステム v2.0
 
-このドキュメントは、Neovimキーマップシステムの内部設計と高度なカスタマイズ方法について説明します。
+このドキュメントは、リファクタリング後のNeovimキーマップシステムの設計と使用方法について説明します。
 
 ## システム概要
 
-このdotfilesのキーマップシステムは、複数の配列（大西配列、QWERTY配列）に対応し、論理的なキー名によってキーマップを定義できる抽象化レイヤーを提供します。
+このdotfilesのキーマップシステムは、複数の配列（大西配列、QWERTY配列）に対応し、論理的なキー名によってキーマップを定義できる抽象化レイヤーを提供します。v2.0では、プラグイン化に向けたモジュール化とユーザビリティの向上を実現しています。
 
 ### 設計目標
 
-1. **配列非依存**: ユーザーはQWERTY基準で考えてキーマップを定義
-2. **動的切り替え**: 実行時に配列を切り替え可能
-3. **VSCode統合**: VSCode Neovim拡張との完全な互換性
-4. **拡張性**: 新しい配列やキーマップパターンを容易に追加可能
+1. **ユーザー設定の分離**: カスタマイズは専用の設定ファイルで完結
+2. **配列非依存**: 論理キー名による抽象化
+3. **動的切り替え**: 実行時に配列を切り替え可能
+4. **VSCode統合**: VSCode Neovim拡張との完全な互換性
+5. **プラグイン化対応**: 将来的な独立パッケージ化を考慮した設計
+6. **設定バリデーション**: エラーの早期発見と安全なフォールバック
 
 ## アーキテクチャ
 
-### 依存関係図
+### 依存関係図（v2.0リファクタリング後）
 
 ```mermaid
 graph TD
-    A[keymaps.lua<br/>ユーザー設定ファイル] --> B[keymap-manager.lua<br/>抽象化API層]
-    A --> C[layout-manager.lua<br/>配列管理システム]
+    A[user-config.lua<br/>ユーザー設定] --> B[keymaps.lua<br/>メインエントリーポイント]
+    B --> C[config-schema.lua<br/>設定バリデーション]
+    B --> D[keymap-manager.lua<br/>API層]
+    B --> E[layout-manager.lua<br/>配列管理]
     
-    B --> C
-    B --> D[vim.keymap.set<br/>Vim標準API]
+    D --> F[core.lua<br/>コア機能]
+    E --> F
+    E --> G[onishi.lua<br/>大西配列]
+    E --> H[qwerty.lua<br/>QWERTY配列]
     
-    C --> E[onishi.lua<br/>大西配列定義]
-    C --> F[qwerty.lua<br/>QWERTY配列定義]
-    C --> G[common.lua<br/>共通ユーティリティ]
+    G --> I[common.lua<br/>共通機能]
+    G --> J[vscode.lua<br/>VSCode統合]
+    H --> I
+    H --> J
     
-    E --> H[vscode.lua<br/>VSCode固有機能]
-    F --> H
+    F --> K[vim.keymap.set<br/>Vim標準API]
     
-    style A fill:#e1f5fe
+    style A fill:#e3f2fd
     style B fill:#f3e5f5
     style C fill:#fff3e0
     style D fill:#e8f5e8
     style E fill:#fce4ec
-    style F fill:#fce4ec
-    style G fill:#f1f8e9
-    style H fill:#fff8e1
+    style F fill:#fff8e1
+    style G fill:#e1f5fe
+    style H fill:#e1f5fe
+    style I fill:#f1f8e9
+    style J fill:#fff3e0
+    style K fill:#e8f5e8
     
-    classDef userFile fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef userLayer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
     classDef apiLayer fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef systemLayer fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    classDef coreLayer fill:#fff8e1,stroke:#f57c00,stroke-width:3px
+    classDef systemLayer fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef configLayer fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef utilLayer fill:#f1f8e9,stroke:#689f38,stroke-width:2px
     classDef vimApi fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef configFile fill:#fce4ec,stroke:#c2185b,stroke-width:2px
     
-    class A userFile
-    class B apiLayer
-    class C systemLayer
-    class D vimApi
-    class E,F,G,H configFile
+    class A userLayer
+    class B,D apiLayer
+    class F coreLayer
+    class C,E systemLayer
+    class G,H configLayer
+    class I,J utilLayer
+    class K vimApi
 ```
 
 ### レイヤー構成
