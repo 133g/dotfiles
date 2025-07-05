@@ -19,6 +19,7 @@ require("lazy").setup({
     { import = "plugins.lualine" },
     { import = "plugins.barbar" },
     { import = "plugins.oil" },
+    { import = "plugins.hlchunk" },
   }
 })
 

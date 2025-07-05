@@ -1,46 +1,13 @@
 # dotfiles
 
-macOS、Linux、WSL2に対応したモダンなdotfiles構成。XDG Base Directory仕様準拠で、統一されたキーマッピング（k=左、t=下、n=上、s=右）を全ツールで採用。
+macOS、Linux、WSL2に対応したdotfiles構成。XDG Base Directory仕様準拠で、統一されたキーマッピング（k=左、t=下、n=上、s=右）を全ツールで採用。
 
 ## 特徴
 
 - **XDG Base Directory準拠**: すべての設定ファイルを`~/.config/`以下に統一
-- **マルチプラットフォーム対応**: macOS、Linux、WSL2を自動検出してプラットフォーム固有の設定を適用
-- **統一キーマッピング**: Neovim、tmux、シェルで一貫したキーバインド（k=左、t=下、n=上、s=右）
-- **安全なインストール**: 既存ファイルの自動バックアップと冪等性を保証
-- **モジュラー構成**: ディレクトリ単位でのシンボリックリンク管理
-
-## 構成
-
-```
-dotfiles/
-├── nvim/               # Neovim設定（lazy.nvim + nordfox）
-│   ├── init.lua
-│   └── lua/config/
-│       ├── options.lua     # 基本設定
-│       ├── keymaps.lua     # キーマップ管理
-│       ├── keymaps/        # キーマップ詳細設定
-│       │   ├── common.lua      # 共通機能
-│       │   ├── vscode.lua      # VSCode専用設定
-│       │   ├── onishi.lua      # 大西配列
-│       │   └── qwerty.lua      # QWERTY配列
-│       ├── ime.lua         # IME設定
-│       ├── wsl.lua         # WSL2設定
-│       └── lazy.lua        # プラグイン管理
-├── claude/             # Claude Code hooks・スクリプト
-│   ├── settings.json       # hooks設定
-│   ├── discord-config.json.example  # Discord設定例
-│   ├── scripts/
-│   │   ├── discord-notify.sh   # Discord通知スクリプト
-│   │   └── setup-discord.sh    # セットアップスクリプト
-│   └── README.md       # Claude設定ドキュメント
-├── zsh/            # Zsh設定（Sheldon + Powerlevel10k）
-├── tmux/           # Tmux設定（カスタムキーバインド）
-├── sheldon/        # Zsh plugin manager設定
-├── ghostty/        # Ghostty terminal設定（macOSのみ）
-├── p10k/           # Powerlevel10k prompt設定
-└── bin/            # インストールスクリプト
-```
+- **マルチプラットフォーム対応**: macOS、Linux、WSL2を自動検出
+- **統一キーマッピング**: Neovim、tmux、シェルで一貫したキーバインド
+- **安全なインストール**: 既存ファイルの自動バックアップ
 
 ## インストール
 
@@ -76,19 +43,16 @@ cd ~/.dotfiles
 | `claude/` | `~/.claude/` | Claude Code hooks・スクリプト |
 | `ghostty/`* | `~/Library/Application Support/com.mitchellh.ghostty` | Ghostty設定（macOSのみ） |
 
-*macOSでのみ作成されます
-
 ## 主要ツール設定
 
 ### Neovim
+
 - **プラグイン管理**: lazy.nvim
 - **カラーテーマ**: nordfox
 - **キーマッピング**: 大西配列（k=左、t=下、n=上、s=右）とQWERTY配列の切り替え対応
 - **VSCode統合**: Neovim拡張との連携機能
 
-#### キーマップ切り替え機能
-
-以下のコマンドを使用してキーマップを切り替えます：
+#### キーマップ切り替え
 
 | コマンド | 機能 |
 |----------|------|
@@ -100,6 +64,7 @@ cd ~/.dotfiles
 設定は自動的に保存され、次回起動時に復元されます。
 
 ### Zsh
+
 - **プラグイン管理**: Sheldon
 - **プロンプト**: Powerlevel10k
 - **主要プラグイン**: 
@@ -109,93 +74,71 @@ cd ~/.dotfiles
   - fzf（ファジーファインダー）
 
 ### Tmux
+
 - **キーマッピング**: Neovimと統一（k=左、t=下、n=上、s=右）
 - **テーマ**: nordfox
 - **XDG対応**: `~/.config/tmux/`に設定配置
 
 ### Claude Code
+
 - **Discord通知**: Stop/Notificationイベント時の自動通知
-- **Hooks設定**: 新フォーマット対応の自動設定システム
 - **セットアップスクリプト**: Discord Webhook URL設定 + hooks自動設定
-- **冪等性保証**: 既存hooks設定の保護・重複実行安全性
-- **インタラクティブテスト**: セットアップ時の通知動作確認
 
-#### Discord通知設定
-1. `~/.claude/scripts/setup-discord.sh`を実行
-2. Discord ServerでWebhook URLを作成・入力
-3. **hooks設定が自動で構成される**（既存設定は保護）
-4. **セットアップ時にテスト通知を実行可能**
-5. Claude Code停止時・通知時に自動でDiscordに通知
-
-**特徴**:
-- **新hooks フォーマット対応**: Claude Code最新版の設定構造に対応
-- **環境非依存**: ハードコードパスを排除し任意の環境で動作
-- **安全な設定更新**: 他のhooks設定を上書きせずに部分更新
-
-### その他
-- **日本語IME**: zenhan/im-selectによる自動切り替え（macOS）
-- **WSL2対応**: クリップボード統合とWindows連携機能
+Discord通知の詳細なセットアップ手順については [claude/README.md](claude/README.md) を参照してください。
 
 ## カスタマイズ
 
 ### Neovimキーマップのカスタマイズ
 
-#### 新しいキーマップの追加
-通常のキーマップを追加する場合は、各配列ファイルに設定を追加してください：
+#### 論理キーマッピング（推奨）
 
-```lua
--- ~/.config/nvim/lua/config/keymaps/onishi.lua または qwerty.lua
-local onishi_config = {
-  -- 新しいキーマップを追加
-  normal = {
-    ['n'] = 'up',
-    ['t'] = 'down',
-    -- 新しいマッピングをここに追加
-    ['<leader>f'] = 'find_files',
-  },
-  -- ...
-}
-```
-
-#### 配列に依存しないキーマップの追加
-両配列で共通のキーマップは `keymaps.lua` に直接追加してください：
+配列に関係なくQWERTY基準で考えてキーマップを追加する方法です：
 
 ```lua
 -- ~/.config/nvim/lua/config/keymaps.lua
--- 起動時の初期化の後に追加
-vim.keymap.set('n', '<leader>w', ':w<CR>', { silent = true })
+local km = require('config.keymaps.keymap-manager')
+
+-- 上下移動を表示行単位に変更
+km.map('down', 'gj', { desc = 'Move down by display line' })
+km.map('up', 'gk', { desc = 'Move up by display line' })
+
+-- リーダーキー使用例
+km.map_leader('w', ':w<CR>', { desc = 'Save file' })
+km.map_leader('q', ':q<CR>', { desc = 'Quit' })
+
+-- 複数のマッピングを一括設定
+km.map_bulk({
+  up = '5k',      -- 5行上移動
+  down = '5j',    -- 5行下移動
+  left = 'B',     -- 前の単語（空白区切り）
+  right = 'W'     -- 次の単語（空白区切り）
+}, { desc = 'Fast movement' })
 ```
 
-#### 新しい配列の追加
-1. `keymaps/` ディレクトリに新しいファイルを作成
-2. 設定テーブルを定義
-3. `keymaps.lua` で新しい配列を登録
+**対応キー**:
+| 論理キー | QWERTY | 大西配列 |
+|---------|--------|---------|
+| `up` | k | n |
+| `down` | j | t |
+| `left` | h | k |
+| `right` | l | s |
 
-```lua
--- 例: ~/.config/nvim/lua/config/keymaps/dvorak.lua
-local common = require('config.keymaps.common')
-local vscode = require('config.keymaps.vscode')
+**利用可能なAPI**:
+| 関数 | 用途 | 例 |
+|------|------|-----|
+| `km.map(key, target, opts)` | 論理キーマッピング | `km.map('up', 'gk')` |
+| `km.map_leader(key, target, opts)` | リーダーキー | `km.map_leader('w', ':w<CR>')` |
+| `km.map_local_leader(key, target, opts)` | ローカルリーダー | `km.map_local_leader('t', ':TestFile<CR>')` |
+| `km.map_bulk(mappings, opts)` | 一括設定 | `km.map_bulk({up='5k', down='5j'})` |
 
-local dvorak_config = {
-  -- 設定を定義
-}
-
-return {
-  setup = function()
-    vscode.setup_keymaps(dvorak_config)
-    common.setup_neovim_keymaps(dvorak_config)
-  end,
-  clear = function()
-    -- キーの削除
-  end
-}
-```
+キーマップシステムの詳細設計や新しい配列の追加方法については、[nvim/lua/config/keymaps/README.md](nvim/lua/config/keymaps/README.md) を参照してください。
 
 #### Neovimプラグインの追加
 
 プラグインの追加方法は、設定の複雑さに応じて以下の2つの方法から選択してください：
 
 ##### 設定が必要なプラグイン
+
 複雑な設定が必要なプラグインは個別ファイルで管理してください：
 
 1. `lua/plugins/` ディレクトリに新しいファイルを作成
@@ -227,6 +170,7 @@ require("lazy").setup({
 ```
 
 ##### 設定が不要なプラグイン
+
 設定が不要なプラグインは `lazy.lua` に直接追加してください：
 
 ```lua
@@ -245,32 +189,12 @@ require("lazy").setup({
 })
 ```
 
-または、複数の軽量プラグインをまとめた専用ファイルを作成することも可能です：
+### その他のカスタマイズ
 
-```lua
--- lua/plugins/simple.lua
-return {
-  { "vim-jp/vimdoc-ja" },
-  { "tpope/vim-sleuth" },
-  { "nvim-tree/nvim-web-devicons" },
-}
-```
-
-### ローカル設定
-各ツールのローカル設定用ファイルを作成してください：
-
-```bash
-# Zsh
-~/.config/zsh/.zshrc.local
-
-# Neovim  
-~/.config/nvim/lua/config/local.lua
-
-# Tmux
-~/.config/tmux/local.conf
-```
+各ツール（Zsh、Tmux、Ghosttyなど）の詳細なカスタマイズ方法、ローカル設定ファイルの作成方法、環境固有設定については [CUSTOMIZE.md](CUSTOMIZE.md) を参照してください。
 
 ### 環境固有設定
+
 WSL2環境では以下の追加設定スクリプトを実行してください：
 ```bash
 ./bin/setup-wsl2.sh
@@ -279,6 +203,7 @@ WSL2環境では以下の追加設定スクリプトを実行してください�
 ## トラブルシューティング
 
 ### バックアップの復元
+
 ```bash
 # バックアップファイルの確認
 ls ~/.dotbackup/
@@ -288,12 +213,14 @@ mv ~/.dotbackup/nvim.20240101_120000 ~/.config/nvim
 ```
 
 ### リンクの確認
+
 ```bash
 # シンボリックリンクの状態確認
 ls -la ~/.config/nvim ~/.config/zsh ~/.config/tmux
 ```
 
 ### 再インストール
+
 ```bash
 # 強制的に再インストール（確認なし）
 ./bin/install.sh --force

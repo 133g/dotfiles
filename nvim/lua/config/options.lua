@@ -14,3 +14,6 @@ vim.opt.listchars = 'tab:>-', 'trail:*', 'nbsp:+'
 
 -- クリップボードをシステムと共有
 vim.opt.clipboard = 'unnamedplus'
+
+-- xで削除するときレジスタへの保存を回避
+vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
