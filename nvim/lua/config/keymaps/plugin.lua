@@ -46,85 +46,28 @@ M.config = {
 }
 
 -- プラグインのセットアップ関数（プラグインマネージャー用）
--- @param opts table: ユーザー設定（省略可能）
+-- @param opts table: 設定オプション（省略可能）
+-- @param opts.default_layout string: デフォルト配列名（'onishi' | 'qwerty'）
+-- @param opts.enable_layout_switching boolean: 配列切り替え機能の有効/無効
+-- @param opts.enable_commands boolean: コマンド登録の有効/無効
 function M.setup(opts)
   opts = opts or {}
   
-  -- デフォルト設定とユーザー設定をマージ
-  local config = vim.tbl_deep_extend('force', M.config.default, opts)
-  
-  -- リーダーキーの設定
-  if config.leader_keys then
-    vim.g.mapleader = config.leader_keys.leader
-    vim.g.maplocalleader = config.leader_keys.localleader
-  end
+  -- デフォルト設定
+  local config = {
+    default_layout = opts.default_layout or 'onishi',
+    enable_layout_switching = opts.enable_layout_switching ~= false,
+    enable_commands = opts.enable_commands ~= false,
+  }
   
   -- コアシステムの初期化
-  M.core.init(config.layout_settings or {})
+  M.core.init(config)
   
   -- 配列エンジンの初期化
-  M.engine.init(config.layout_settings or {})
-  
-  -- ユーザーキーマップの適用
-  if config.basic_keymaps then
-    for _, keymap in ipairs(config.basic_keymaps) do
-      M.api.map(keymap.logical_key, keymap.target, keymap.opts)
-    end
-  end
-  
-  if config.leader_keymaps then
-    for _, keymap in ipairs(config.leader_keymaps) do
-      M.api.map_leader(keymap.key, keymap.target, keymap.opts)
-    end
-  end
-  
-  if config.local_leader_keymaps then
-    for _, keymap in ipairs(config.local_leader_keymaps) do
-      M.api.map_local_leader(keymap.key, keymap.target, keymap.opts)
-    end
-  end
-  
-  if config.bulk_keymaps then
-    for _, bulk in ipairs(config.bulk_keymaps) do
-      M.api.map_bulk(bulk.mappings, bulk.opts)
-    end
-  end
-  
-  -- ファイルタイプ固有のキーマップ
-  if config.filetype_keymaps then
-    for filetype, keymaps in pairs(config.filetype_keymaps) do
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = filetype,
-        callback = function()
-          for _, keymap in ipairs(keymaps) do
-            M.api.map_local_leader(keymap.key, keymap.target, 
-              vim.tbl_extend('force', keymap.opts or {}, { buffer = true }))
-          end
-        end,
-      })
-    end
-  end
-  
-  -- 配列切り替え後のイベント処理
-  if config.plugin_settings and config.plugin_settings.enable_autocmds then
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'KeymapLayoutChanged',
-      callback = function()
-        -- ユーザーキーマップの再適用
-        if config.basic_keymaps then
-          for _, keymap in ipairs(config.basic_keymaps) do
-            M.api.map(keymap.logical_key, keymap.target, keymap.opts)
-          end
-        end
-      end,
-      desc = 'Reapply user keymaps after layout change'
-    })
-  end
+  M.engine.init(config)
   
   -- コマンドの登録
-  if config.plugin_settings and config.plugin_settings.enable_commands and 
-     config.layout_settings and config.layout_settings.enable_layout_switching then
-    
+  if config.enable_commands and config.enable_layout_switching then
     vim.api.nvim_create_user_command('ToggleKeymap', function()
       M.engine.toggle_layout()
     end, {
@@ -165,13 +108,11 @@ function M.status()
   }
 end
 
--- 便利関数のエイリアス
+-- 基本API関数のエイリアス
 M.map = M.api.map
-M.map_leader = M.api.map_leader
-M.map_local_leader = M.api.map_local_leader
-M.map_bulk = M.api.map_bulk
 M.toggle = M.engine.toggle_layout
 M.set_layout = M.engine.set_layout
 M.get_layout = M.engine.get_current_layout
+M.get_available_keys = M.api.get_available_keys
 
 return M
