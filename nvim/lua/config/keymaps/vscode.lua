@@ -1,7 +1,21 @@
 local M = {}
 
--- ユーザー設定を読み込み
-local user_config = require('config.keymaps.user-config')
+-- ユーザー設定を読み込み（新しいパス）
+local function get_user_config()
+  local ok, user_config = pcall(require, 'config.keymaps.config.user')
+  if ok then
+    return user_config
+  end
+  -- フォールバック：旧パス
+  ok, user_config = pcall(require, 'config.keymaps.user-config')
+  if ok then
+    return user_config
+  end
+  -- デフォルト設定
+  return require('config.keymaps.config.default')
+end
+
+local user_config = get_user_config()
 
 -- VSCode環境の判定
 M.is_vscode = vim.g.vscode ~= nil and user_config.vscode_settings.enable_vscode_integration
@@ -109,32 +123,47 @@ function M.create_visual_mapping(key, direction, fallback_key)
   end
 end
 
--- VSCode環境でのキーマップ設定
-function M.setup_keymaps(keymap_config)
+-- VSCode環境でのキーマップ設定（新しい配列定義形式に対応）
+function M.setup_keymaps(layout_config)
   if not M.is_vscode then
     return
   end
   
+  -- 新しい形式：layout_config.vscode_config
+  local vscode_config = layout_config
+  if layout_config.vscode_config then
+    vscode_config = layout_config.vscode_config
+  end
+  
   -- ノーマルモードのマッピング
-  for key, direction in pairs(keymap_config.normal) do
-    vim.keymap.set('n', key, M.normal_move(direction), { expr = true, silent = true })
+  if vscode_config.normal then
+    for key, direction in pairs(vscode_config.normal) do
+      vim.keymap.set('n', key, M.normal_move(direction), { expr = true, silent = true })
+    end
   end
   
   -- ビジュアルモードのマッピング
-  for key, config in pairs(keymap_config.visual) do
-    vim.keymap.set('v', key, M.create_visual_mapping(key, config.direction, config.fallback), { expr = true, silent = true })
+  if vscode_config.visual then
+    for key, config in pairs(vscode_config.visual) do
+      if type(config) == "table" and config.direction then
+        vim.keymap.set('v', key, M.create_visual_mapping(key, config.direction, config.fallback), { expr = true, silent = true })
+      else
+        -- シンプルなマッピングの場合
+        vim.keymap.set('v', key, M.normal_move(config), { expr = true, silent = true })
+      end
+    end
   end
   
   -- ビジュアルラインモード/ブロックモードのマッピング
-  if keymap_config.visual_line then
-    for key, target in pairs(keymap_config.visual_line) do
+  if vscode_config.visual_line then
+    for key, target in pairs(vscode_config.visual_line) do
       vim.keymap.set('x', key, target, { silent = true, noremap = true })
     end
   end
   
   -- 交換マッピング
-  if keymap_config.swap_mappings then
-    for key, target in pairs(keymap_config.swap_mappings) do
+  if vscode_config.swap_mappings then
+    for key, target in pairs(vscode_config.swap_mappings) do
       vim.keymap.set({'n', 'v'}, key, target, { silent = true, noremap = true })
     end
   end

@@ -1,6 +1,29 @@
-# Neovim キーマップシステム v2.0
+# Logical Keymap System v2.0
 
-このドキュメントは、リファクタリング後のNeovimキーマップシステムの設計と使用方法について説明します。
+論理キーマッピングシステム - 配列非依存のキーマップ管理
+
+このドキュメントは、プラグイン化対応版Neovimキーマップシステムの設計、使用方法、およびプラグインとしての配布方法について説明します。
+
+## ドキュメント一覧
+
+- **[ユーザーガイド](USER_GUIDE.md)** - 基本的な使い方と機能説明
+- **[プラグインセットアップガイド](PLUGIN_SETUP.md)** - プラグインとしてのインストールと設定方法
+- **[技術仕様書](README.md)** (このファイル) - 内部アーキテクチャと拡張方法
+- **[非推奨ファイル一覧](DEPRECATED.md)** - 旧アーキテクチャからの移行情報
+
+## クイックスタート
+
+### 既存のdotfilesユーザー
+現在の設定ファイル `nvim/lua/config/keymaps/config/user.lua` を編集してカスタマイズ
+
+### プラグインとして使用
+```lua
+require("config.keymaps.plugin").setup({
+  layout_settings = { default_layout = 'onishi' }
+})
+```
+
+詳細は [プラグインセットアップガイド](PLUGIN_SETUP.md) を参照
 
 ## システム概要
 
@@ -368,9 +391,130 @@ print(vim.inspect(km.get_available_keys()))
 - 起動時の初期化は1回のみ実行
 - 論理キーの解決はキーマップ設定時に実行（実行時ではない）
 
+## プラグインとしての使用方法
+
+### プラグインマネージャーでのインストール
+
+#### lazy.nvim
+
+```lua
+{
+  "user/logical-keymap",
+  config = function()
+    require("logical-keymap").setup({
+      -- 基本設定
+      leader_keys = {
+        leader = " ",
+        localleader = " ",
+      },
+      -- 基本的なキーマップ
+      basic_keymaps = {
+        { logical_key = 'down', target = 'gj', opts = { silent = true, desc = 'Move down by display line' } },
+        { logical_key = 'up', target = 'gk', opts = { silent = true, desc = 'Move up by display line' } },
+      },
+      -- 配列設定
+      layout_settings = {
+        default_layout = 'onishi',
+        enable_layout_switching = true,
+      },
+    })
+  end,
+}
+```
+
+#### packer.nvim
+
+```lua
+use {
+  'user/logical-keymap',
+  config = function()
+    require('logical-keymap').setup()
+  end
+}
+```
+
+### API使用例
+
+```lua
+local keymap = require('logical-keymap')
+
+-- 基本的なマッピング
+keymap.map('up', 'gk', { desc = 'Move up by display line' })
+keymap.map('down', 'gj', { desc = 'Move down by display line' })
+
+-- リーダーキーマッピング
+keymap.map_leader('w', ':w<CR>', { desc = 'Save file' })
+
+-- 一括マッピング
+keymap.map_bulk({
+  left = 'B',
+  right = 'W'
+}, { desc = 'Word navigation' })
+
+-- 配列切り替え
+keymap.toggle()          -- 配列をトグル
+keymap.set_layout('qwerty')  -- QWERTY配列に設定
+
+-- 状態確認
+print(vim.inspect(keymap.status()))
+```
+
+### カスタム配列の追加
+
+```lua
+-- カスタム配列を登録
+local keymap = require('logical-keymap')
+
+keymap.core.register_layout('dvorak', {
+  layout_name = "dvorak",
+  display_name = "Dvorak配列",
+  logical_mapping = {
+    up = ",",
+    down = "o", 
+    left = "a",
+    right = "e"
+  },
+  vscode_config = {
+    normal = {
+      [","] = "up",
+      ["o"] = "down",
+      ["a"] = "left", 
+      ["e"] = "right"
+    }
+  },
+  neovim_config = {
+    basic = {
+      [","] = "k",
+      ["o"] = "j",
+      ["a"] = "h",
+      ["e"] = "l"
+    }
+  },
+  clear_keys = {",", "o", "a", "e"},
+  compatibility = {
+    version = "2.0",
+    supports_vscode = true,
+    supports_neovim = true
+  }
+})
+
+-- 使用
+keymap.set_layout('dvorak')
+```
+
 ## 将来の拡張計画
 
+### v2.1
+- プラグインマネージャー対応の完全版リリース
+- 設定マイグレーション機能
+- 詳細なドキュメントサイト
+
+### v2.2
 - 複数の論理キーセットのサポート
 - キーマップのインポート/エクスポート機能
+- 高度なカスタマイズオプション
+
+### v3.0
 - GUIでの配列切り替えインターフェース
 - キーマップの使用統計とヒートマップ
+- マルチプラットフォーム対応の強化

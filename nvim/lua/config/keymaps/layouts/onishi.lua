@@ -1,15 +1,22 @@
--- ⚠️ DEPRECATED: このファイルは非推奨です
--- 新しいアーキテクチャでは layouts/onishi.lua を使用してください
--- このファイルは互換性のために残されており、将来削除予定です
-
-local common = require('config.keymaps.common')
-local vscode = require('config.keymaps.vscode')
+-- 大西配列の定義
+-- 純粋な配列定義のみを含む（プラグイン化対応）
 
 local M = {}
 
--- 大西配列の設定定義
-local onishi_config = {
-  -- VSCode用設定
+-- 大西配列の基本マッピング定義
+M.layout_name = "onishi"
+M.display_name = "大西配列"
+
+-- 論理キーから物理キーへのマッピング
+M.logical_mapping = {
+  up = 'n',
+  down = 't',
+  left = 'k',
+  right = 's'
+}
+
+-- VSCode用の詳細設定
+M.vscode_config = {
   normal = {
     ['n'] = 'up',
     ['t'] = 'down',
@@ -41,35 +48,36 @@ local onishi_config = {
     ['J'] = 'N',
     ['l'] = 's',
     ['L'] = 'S',
-  },
-  
-  -- Neovim用設定
-  neovim_basic = {
+  }
+}
+
+-- Neovim用の基本設定
+M.neovim_config = {
+  basic = {
     ['k'] = 'h',
     ['t'] = 'j',
     ['n'] = 'k',
     ['s'] = 'l',
   },
-  neovim_swap = {
+  swap = {
     ['h'] = 't',
     ['H'] = 'T',
     ['j'] = 'n',
     ['J'] = 'N',
     ['l'] = 's',
     ['L'] = 'S',
-  },
+  }
 }
 
--- 大西配列のキーマップを設定
-function M.setup()
-  vscode.setup_keymaps(onishi_config)
-  common.setup_neovim_keymaps(onishi_config)
-end
+-- クリア対象のキー一覧
+M.clear_keys = {'n', 't', 'k', 's', '0', '^', '$', 'h', 'H', 'j', 'J', 'l', 'L'}
 
--- 大西配列のキーマップを削除
-function M.clear()
-  local keys = {'n', 't', 'k', 's', '0', '^', '$', 'h', 'H', 'j', 'J', 'l', 'L'}
-  common.clear_keymaps(keys)
-end
+-- 配列の互換性情報
+M.compatibility = {
+  version = "2.0",
+  supports_vscode = true,
+  supports_neovim = true,
+  custom_logical_keys = {}
+}
 
 return M

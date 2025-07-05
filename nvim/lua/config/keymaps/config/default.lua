@@ -1,9 +1,5 @@
--- ⚠️ DEPRECATED: このファイルは非推奨です
--- 新しいアーキテクチャでは config/user.lua を使用してください
--- このファイルは互換性のために残されており、将来削除予定です
---
--- ユーザーカスタマイズ設定
--- このファイルをユーザーが直接編集してキーマップをカスタマイズします
+-- デフォルト設定
+-- プラグイン化対応版 - システムデフォルト値の定義
 
 local M = {}
 
@@ -22,20 +18,18 @@ M.basic_keymaps = {
 
 -- リーダーキーを使ったカスタムキーマップ
 M.leader_keymaps = {
-  -- 例: <leader>w で保存
+  -- デフォルトではファイル保存のみ
   { key = 'w', target = ':w<CR>', opts = { desc = 'Save file' } },
 }
 
 -- ローカルリーダーキーを使ったカスタムキーマップ
 M.local_leader_keymaps = {
-  -- 例: <localleader>r でファイルを実行
-  -- { key = 'r', target = ':luafile %<CR>', opts = { desc = 'Run current Lua file' } },
+  -- デフォルトでは空
 }
 
 -- 一括設定用のカスタムキーマップ
 M.bulk_keymaps = {
-  -- 複数のキーマップを一度に設定
-  -- { mappings = { left = 'B', right = 'W' }, opts = { desc = 'Word navigation' } },
+  -- デフォルトでは空
 }
 
 -- ファイルタイプ固有のキーマップ
@@ -43,18 +37,44 @@ M.filetype_keymaps = {
   lua = {
     { key = 'r', target = ':luafile %<CR>', opts = { desc = 'Run current Lua file' } },
   },
-  -- 他のファイルタイプの設定を追加可能
 }
 
--- 配列固有の設定（通常は変更不要）
+-- 配列固有の設定
 M.layout_settings = {
   default_layout = 'onishi',  -- 起動時のデフォルト配列
   enable_layout_switching = true,  -- 配列切り替え機能の有効/無効
+  auto_save_layout = true,  -- 配列状態の自動保存
 }
 
 -- VSCode固有の設定
 M.vscode_settings = {
   enable_vscode_integration = true,  -- VSCode統合の有効/無効
+  enhanced_visual_mode = true,  -- 拡張ビジュアルモード機能
+}
+
+-- プラグイン設定
+M.plugin_settings = {
+  version = "2.0",
+  enable_commands = true,  -- コマンド登録の有効/無効
+  enable_autocmds = true,  -- オートコマンドの有効/無効
+  debug_mode = false,  -- デバッグモード
+}
+
+-- パフォーマンス設定
+M.performance_settings = {
+  lazy_loading = true,  -- 遅延読み込み
+  cache_layouts = true,  -- 配列定義のキャッシュ
+  validation_level = "normal",  -- 設定バリデーションレベル (none/minimal/normal/strict)
+}
+
+-- 高度な設定
+M.advanced_settings = {
+  custom_layouts = {},  -- カスタム配列定義
+  hooks = {
+    before_layout_switch = nil,  -- 配列切り替え前のフック
+    after_layout_switch = nil,   -- 配列切り替え後のフック
+  },
+  extensions = {},  -- プラグイン拡張
 }
 
 return M

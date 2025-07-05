@@ -1,6 +1,7 @@
 -- キーマップシステムのメインエントリーポイント
+-- プラグイン化対応版 v2.0
 -- このファイルは自動生成される設定のため、直接編集しないでください
--- カスタマイズは keymaps/user-config.lua で行ってください
+-- カスタマイズは keymaps/config/user.lua で行ってください
 
 -- 起動時パフォーマンス最適化のため、遅延読み込みを活用
 local user_config, config_errors
@@ -8,7 +9,7 @@ local user_config, config_errors
 -- 設定の遅延初期化
 local function init_user_config()
   if not user_config then
-    local raw_user_config = require('config.keymaps.user-config')
+    local raw_user_config = require('config.keymaps.config.user')
     local config_schema = require('config.keymaps.config-schema')
     user_config, config_errors = config_schema.sanitize_config(raw_user_config)
     
@@ -27,8 +28,8 @@ user_config = init_user_config()
 vim.g.mapleader = user_config.leader_keys.leader
 vim.g.maplocalleader = user_config.leader_keys.localleader
 
--- キーマップ管理APIを読み込み
-local km = require('config.keymaps.keymap-manager')
+-- 新しいプラグインアーキテクチャのAPI読み込み
+local km = require('config.keymaps.plugin.keymap-api')
 
 -- ユーザー設定のキーマップを適用する関数
 local function apply_user_keymaps()
@@ -54,14 +55,46 @@ local function apply_user_keymaps()
 end
 
 -- 配列切り替え後にユーザーキーマップを再適用するためのオートコマンド
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'KeymapLayoutChanged',
-  callback = apply_user_keymaps,
-  desc = 'Reapply user keymaps after layout change'
-})
+if user_config.plugin_settings.enable_autocmds then
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'KeymapLayoutChanged',
+    callback = apply_user_keymaps,
+    desc = 'Reapply user keymaps after layout change'
+  })
+end
 
--- 配列管理システムを初期化
-require('config.keymaps.layout-manager').init()
+-- コマンド登録（設定で有効な場合のみ）
+if user_config.plugin_settings.enable_commands and user_config.layout_settings.enable_layout_switching then
+  vim.api.nvim_create_user_command('ToggleKeymap', function()
+    require('config.keymaps.plugin.layout-engine').toggle_layout()
+  end, {
+    desc = 'キーマップ配列を切り替え（大西配列 ⇔ QWERTY配列）'
+  })
+
+  vim.api.nvim_create_user_command('KeymapOnishi', function()
+    require('config.keymaps.plugin.layout-engine').set_layout('onishi')
+  end, {
+    desc = 'キーマップを大西配列に設定'
+  })
+
+  vim.api.nvim_create_user_command('KeymapQwerty', function()
+    require('config.keymaps.plugin.layout-engine').set_layout('qwerty')
+  end, {
+    desc = 'キーマップをQWERTY配列に設定'
+  })
+
+  vim.api.nvim_create_user_command('KeymapStatus', function()
+    local engine = require('config.keymaps.plugin.layout-engine')
+    local status = engine.get_layout_status()
+    print('Keymap: ' .. status.current_display_name)
+  end, {
+    desc = 'Show current keymap layout'
+  })
+end
+
+-- 新しい配列エンジンを初期化
+local layout_engine = require('config.keymaps.plugin.layout-engine')
+layout_engine.init(user_config.layout_settings)
 
 -- 初回のユーザーキーマップ適用
 apply_user_keymaps()

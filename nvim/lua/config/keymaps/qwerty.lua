@@ -1,3 +1,7 @@
+-- ⚠️ DEPRECATED: このファイルは非推奨です
+-- 新しいアーキテクチャでは layouts/qwerty.lua を使用してください
+-- このファイルは互換性のために残されており、将来削除予定です
+
 local common = require('config.keymaps.common')
 local vscode = require('config.keymaps.vscode')
 
