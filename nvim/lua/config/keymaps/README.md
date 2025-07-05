@@ -34,9 +34,8 @@ require("config.keymaps.plugin").setup({
 1. **ユーザー設定の分離**: カスタマイズは専用の設定ファイルで完結
 2. **配列非依存**: 論理キー名による抽象化
 3. **動的切り替え**: 実行時に配列を切り替え可能
-4. **VSCode統合**: VSCode Neovim拡張との完全な互換性
-5. **プラグイン化対応**: 将来的な独立パッケージ化を考慮した設計
-6. **設定バリデーション**: エラーの早期発見と安全なフォールバック
+4. **プラグイン化対応**: 将来的な独立パッケージ化を考慮した設計
+5. **設定バリデーション**: エラーの早期発見と安全なフォールバック
 
 ## アーキテクチャ
 
@@ -55,9 +54,7 @@ graph TD
     E --> H[qwerty.lua<br/>QWERTY配列]
     
     G --> I[common.lua<br/>共通機能]
-    G --> J[vscode.lua<br/>VSCode統合]
     H --> I
-    H --> J
     
     F --> K[vim.keymap.set<br/>Vim標準API]
     
@@ -70,7 +67,6 @@ graph TD
     style G fill:#e1f5fe
     style H fill:#e1f5fe
     style I fill:#f1f8e9
-    style J fill:#fff3e0
     style K fill:#e8f5e8
     
     classDef userLayer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
@@ -86,7 +82,7 @@ graph TD
     class F coreLayer
     class C,E systemLayer
     class G,H configLayer
-    class I,J utilLayer
+    class I utilLayer
     class K vimApi
 ```
 
@@ -108,7 +104,6 @@ graph TD
 
 4. **設定層** (各配列定義ファイル)
    - 配列固有のキーマップ定義
-   - VSCode固有の処理
    - 共通ユーティリティ関数
 
 5. **Vim層** (`vim.keymap.set`)
@@ -174,37 +169,30 @@ km.map_bulk(mappings, opts)
 
 ```lua
 local config = {
-  -- NeovimとVSCode共通の基本マッピング
-  normal = {
-    ['n'] = 'up',
-    ['t'] = 'down',
-    -- ...
+  -- 論理キーマッピング
+  logical_mapping = {
+    up = 'n',
+    down = 't',
+    left = 'k',
+    right = 's'
   },
   
-  -- VSCode固有のマッピング
-  vscode_normal = {
-    ['n'] = 'up',
-    ['t'] = 'down',
-    -- ...
+  -- Neovim用のキーマッピング
+  key_mappings = {
+    basic = {
+      ['n'] = 'k',
+      ['t'] = 'j',
+      ['k'] = 'h',
+      ['s'] = 'l'
+    }
   },
   
-  -- Neovim固有のマッピング
-  neovim_basic = {
-    ['n'] = 'k',
-    ['t'] = 'j',
-    -- ...
-  },
-  
-  -- 交換マッピング（元のキーも同時に設定）
-  neovim_swap = {
-    ['k'] = 'n',  -- k -> n, n -> k
-    -- ...
-  }
+  -- クリア対象のキー
+  clear_keys = {'n', 't', 'k', 's'}
 }
 
 return {
   setup = function()
-    vscode.setup_keymaps(config)
     common.setup_neovim_keymaps(config)
   end,
   clear = function()
@@ -230,9 +218,6 @@ M.clear_keymaps(keys)
 M.setup_neovim_keymaps(keymap_config)
 ```
 
-### vscode.lua
-
-VSCode Neovim拡張固有の処理を担当します。
 
 ## 新しい配列の追加
 
@@ -241,33 +226,31 @@ VSCode Neovim拡張固有の処理を担当します。
 ```lua
 -- dvorak.lua
 local common = require('config.keymaps.common')
-local vscode = require('config.keymaps.vscode')
 
 local dvorak_config = {
-  normal = {
-    -- Dvorak配列での基本マッピング
+  logical_mapping = {
+    up = ',',
+    down = 'o',
+    left = 'a',
+    right = 'e'
   },
-  vscode_normal = {
-    -- VSCode固有マッピング
+  key_mappings = {
+    basic = {
+      [','] = 'k',
+      ['o'] = 'j',
+      ['a'] = 'h',
+      ['e'] = 'l'
+    }
   },
-  neovim_basic = {
-    -- Neovim基本マッピング
-  },
-  neovim_swap = {
-    -- 交換マッピング
-  }
+  clear_keys = {',', 'o', 'a', 'e'}
 }
 
 return {
   setup = function()
-    vscode.setup_keymaps(dvorak_config)
     common.setup_neovim_keymaps(dvorak_config)
   end,
   clear = function()
-    local keys_to_clear = {
-      -- クリアするキーのリスト
-    }
-    common.clear_keymaps(keys_to_clear)
+    common.clear_keymaps(dvorak_config.clear_keys)
   end
 }
 ```
@@ -369,9 +352,6 @@ end
    - `vim.g.keymap_layout` の値を確認
    - 手動で初期化: `require('config.keymaps.layout-manager').init()`
 
-3. **VSCodeで動作しない**
-   - `vim.g.vscode` が正しく設定されているか確認
-   - VSCode固有のマッピングが定義されているか確認
 
 ### デバッグ方法
 

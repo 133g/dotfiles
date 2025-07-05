@@ -1,13 +1,11 @@
 -- 配列切り替えエンジン
--- プラグイン化対応版 - 配列定義と設定ロジックの分離
+-- Neovim専用プラグイン版
 
 local M = {}
 
 -- 依存モジュール
 local core = require('config.keymaps.plugin.core')
 local layouts = require('config.keymaps.layouts')
-local common = require('config.keymaps.common')
-local vscode = require('config.keymaps.vscode')
 
 -- 現在の配列状態
 local current_layout = nil
@@ -25,14 +23,23 @@ local function setup_layout_keymaps(layout_name)
     return false
   end
   
-  -- VSCode用の設定
-  if layout_def.vscode_config then
-    vscode.setup_keymaps(layout_def)
-  end
-  
-  -- Neovim用の設定
-  if layout_def.neovim_config then
-    common.setup_neovim_keymaps(layout_def.neovim_config)
+  -- Neovim用のキーマップ設定
+  if layout_def.key_mappings then
+    -- 基本マッピング
+    if layout_def.key_mappings.basic then
+      for key, target in pairs(layout_def.key_mappings.basic) do
+        vim.keymap.set({'n', 'v'}, key, target, { silent = true, noremap = true })
+        vim.keymap.set({'n', 'v'}, "<C-w>"..key, "<C-w>"..target, { silent = true, noremap = true })
+      end
+    end
+    
+    -- 交換マッピング
+    if layout_def.key_mappings.swap then
+      for key, target in pairs(layout_def.key_mappings.swap) do
+        vim.keymap.set({'n', 'v'}, key, target, { silent = true, noremap = true })
+        vim.keymap.set({'n', 'v'}, "<C-w>"..key, "<C-w>"..target, { silent = true, noremap = true })
+      end
+    end
   end
   
   return true
@@ -47,7 +54,17 @@ local function clear_layout_keymaps(layout_name)
     return false
   end
   
-  common.clear_keymaps(layout_def.clear_keys)
+  -- キーマップを安全に削除
+  for _, key in ipairs(layout_def.clear_keys) do
+    pcall(vim.keymap.del, 'n', key)
+    pcall(vim.keymap.del, 'v', key)
+    pcall(vim.keymap.del, 'x', key)
+    
+    -- <C-w>キーマップの削除
+    pcall(vim.keymap.del, 'n', "<C-w>"..key)
+    pcall(vim.keymap.del, 'v', "<C-w>"..key)
+  end
+  
   return true
 end
 

@@ -9,8 +9,7 @@
 3. [クイックスタート](#クイックスタート)
 4. [詳細な使い方](#詳細な使い方)
 5. [カスタマイズ](#カスタマイズ)
-6. [VSCode統合](#vscode統合)
-7. [よくある質問](#よくある質問)
+6. [よくある質問](#よくある質問)
 
 ## 概要
 
@@ -21,14 +20,13 @@ Logical Keymap Systemは、**キーボード配列に依存しない**キーマ�
 #### 解決する問題
 
 - **配列切り替えの手間**: 大西配列とQWERTY配列を使い分ける際のキーマップ再設定
-- **VSCode統合の複雑さ**: VSCode Neovim拡張での特殊な動作への対応
 - **設定の複雑化**: 配列ごとに異なるキーマップ設定の管理
 
 #### 提供する価値
 
 - **論理キー名での設定**: `up`、`down`、`left`、`right`で直感的にキーマップを定義
 - **自動配列切り替え**: `:ToggleKeymap`で瞬時に配列を切り替え
-- **統一されたVSCode体験**: NeovimとVSCodeで一貫したキーマップ動作
+- **統一されたキーマップ体験**: 配列非依存のキーマップ管理
 
 ## 基本機能
 
@@ -161,17 +159,7 @@ M.advanced_settings = {
         left = "a", 
         right = "e"
       },
-      -- VSCode用設定
-      vscode_config = {
-        normal = {
-          [","] = "up",
-          ["o"] = "down", 
-          ["a"] = "left",
-          ["e"] = "right"
-        }
-      },
-      -- Neovim用設定
-      neovim_config = {
+      key_mappings = {
         basic = {
           [","] = "k",
           ["o"] = "j",
@@ -182,32 +170,10 @@ M.advanced_settings = {
       clear_keys = {",", "o", "a", "e"},
       compatibility = {
         version = "2.0",
-        supports_vscode = true,
         supports_neovim = true
       }
     }
   }
-}
-```
-
-## VSCode統合
-
-### 自動環境検出
-
-システムは自動でVSCode Neovim拡張内での実行を検出し、適切な動作に切り替えます。
-
-### VSCode固有の動作
-
-- **ビジュアルモード**: VSCodeのネイティブ選択と統合
-- **折り返し行**: `gj`/`gk`相当の動作を自動実現
-- **コマンド統合**: VSCodeのコマンドパレットとの連携
-
-### 設定例
-
-```lua
-M.vscode_settings = {
-  enable_vscode_integration = true,  -- VSCode統合を有効化
-  enhanced_visual_mode = true,       -- 拡張ビジュアルモード
 }
 ```
 
@@ -255,9 +221,6 @@ M.basic_keymaps = {
 1. 手動で初期化: `:lua require('config.keymaps.plugin.layout-engine').init()`
 2. 状態を確認: `:lua print(vim.inspect(require('config.keymaps.plugin.layout-engine').debug_info()))`
 
-#### VSCodeで動作しない場合
-1. VSCode Neovim拡張が最新版か確認
-2. 設定で統合が有効になっているか確認: `vscode_settings.enable_vscode_integration = true`
 
 ### Q: 設定のバックアップとマイグレーション
 

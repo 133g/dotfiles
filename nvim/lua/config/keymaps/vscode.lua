@@ -17,8 +17,9 @@ end
 
 local user_config = get_user_config()
 
--- VSCode環境の判定
-M.is_vscode = vim.g.vscode ~= nil and user_config.vscode_settings.enable_vscode_integration
+-- VSCode環境の判定（dotfiles環境専用機能）
+-- プラグイン版では使用されない
+M.is_vscode = vim.g.vscode ~= nil
 
 -- ビジュアルモード検出用のヘルパー関数
 function M.get_visual_mode()

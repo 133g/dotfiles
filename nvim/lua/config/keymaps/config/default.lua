@@ -1,5 +1,5 @@
 -- デフォルト設定
--- プラグイン化対応版 - システムデフォルト値の定義
+-- Neovim専用プラグインのデフォルト設定
 
 local M = {}
 
@@ -46,11 +46,6 @@ M.layout_settings = {
   auto_save_layout = true,  -- 配列状態の自動保存
 }
 
--- VSCode固有の設定
-M.vscode_settings = {
-  enable_vscode_integration = true,  -- VSCode統合の有効/無効
-  enhanced_visual_mode = true,  -- 拡張ビジュアルモード機能
-}
 
 -- プラグイン設定
 M.plugin_settings = {

@@ -43,11 +43,6 @@
         auto_save_layout = true,
       },
       
-      -- VSCode統合
-      vscode_settings = {
-        enable_vscode_integration = true,
-        enhanced_visual_mode = true,
-      },
       
       -- プラグイン設定
       plugin_settings = {
@@ -182,11 +177,6 @@ require("config.keymaps.plugin").setup({
     auto_save_layout = true,
   },
   
-  -- VSCode統合
-  vscode_settings = {
-    enable_vscode_integration = true,
-    enhanced_visual_mode = true,
-  },
   
   -- プラグイン設定
   plugin_settings = {
@@ -215,15 +205,7 @@ require("config.keymaps.plugin").setup({
           left = "a",
           right = "e"
         },
-        vscode_config = {
-          normal = {
-            [","] = "up",
-            ["o"] = "down",
-            ["a"] = "left",
-            ["e"] = "right"
-          }
-        },
-        neovim_config = {
+        key_mappings = {
           basic = {
             [","] = "k",
             ["o"] = "j",
@@ -234,7 +216,6 @@ require("config.keymaps.plugin").setup({
         clear_keys = {",", "o", "a", "e"},
         compatibility = {
           version = "2.0",
-          supports_vscode = true,
           supports_neovim = true
         }
       }

@@ -1,5 +1,5 @@
 -- ユーザーカスタマイズ設定
--- プラグイン化対応版 - このファイルをユーザーが直接編集してキーマップをカスタマイズします
+-- Neovim専用プラグイン版 - このファイルをユーザーが直接編集してキーマップをカスタマイズします
 --
 -- 📖 使い方ガイド:
 --   - 基本的な使い方: keymaps/USER_GUIDE.md
@@ -11,7 +11,6 @@
 --   - リーダーキーマッピング (<leader>キー)
 --   - ファイルタイプ固有のマッピング
 --   - 配列切り替え設定
---   - VSCode統合設定
 
 local M = {}
 
@@ -50,12 +49,6 @@ M = vim.tbl_deep_extend('force', default, {
     default_layout = 'onishi',  -- 起動時のデフォルト配列
     enable_layout_switching = true,  -- 配列切り替え機能の有効/無効
     auto_save_layout = true,  -- 配列状態の自動保存
-  },
-
-  -- VSCode固有の設定
-  vscode_settings = {
-    enable_vscode_integration = true,  -- VSCode統合の有効/無効
-    enhanced_visual_mode = true,  -- 拡張ビジュアルモード機能
   },
 })
 

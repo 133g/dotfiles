@@ -1,5 +1,5 @@
 -- プラグイン情報とエントリーポイント
--- プラグイン化時のメインエントリーファイル
+-- Neovim専用論理キーマッピングシステム
 
 local M = {}
 
@@ -7,7 +7,7 @@ local M = {}
 M.info = {
   name = "logical-keymap",
   version = "2.0.0",
-  description = "論理キーマッピングシステム - 配列非依存のキーマップ管理",
+  description = "Neovim専用論理キーマッピングシステム - 配列非依存のキーマップ管理",
   author = "Generated with Claude Code",
   license = "MIT",
   repository = "https://github.com/user/logical-keymap",
@@ -15,9 +15,9 @@ M.info = {
     nvim = ">=0.8.0"
   },
   supports = {
-    vscode_neovim = true,
     various_layouts = true,
-    custom_layouts = true
+    custom_layouts = true,
+    window_operations = true
   }
 }
 
