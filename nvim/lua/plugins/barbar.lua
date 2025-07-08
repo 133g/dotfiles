@@ -25,6 +25,9 @@ return {
       exclude_ft = {'javascript'},
       exclude_name = {'package.json'},
       
+      -- 無名バッファの処理を改善
+      closable = true,
+      
       -- A buffer to this direction will be focused (if it exists) when closing the current buffer.
       focus_on_close = 'left',
       
@@ -115,7 +118,7 @@ return {
       
       -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
       -- where X is the buffer number. But only a static string is accepted here.
-      no_name_title = nil,
+      no_name_title = "[No Name]",
     })
   end,
   -- NordFoxテーマ適用後に色設定を行う

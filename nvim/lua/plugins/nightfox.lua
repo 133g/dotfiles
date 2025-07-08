@@ -12,6 +12,9 @@ return {
       hi NormalFloat  guibg=NONE ctermbg=NONE
       hi Pmenu        guibg=NONE ctermbg=NONE
       hi EndOfBuffer  guibg=NONE ctermbg=NONE
+      " Visual mode の色設定 (Nord系統の色で)
+      hi Visual       guibg=#5E81AC guifg=#ECEFF4 gui=NONE
+      hi VisualNOS    guibg=#5E81AC guifg=#ECEFF4 gui=NONE
     ]])
   end,
 }
