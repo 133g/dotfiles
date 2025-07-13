@@ -6,28 +6,17 @@ return {
     require("hlchunk").setup({
       chunk = {
         enable = true,
-        notify = false,
-        priority = 15,
-        style = {
-          { fg = "#806d9c" },
-        },
-        use_treesitter = true,
+        style = "#806d9c",
+        -- require to apply scripting language like Python (true by default). 
+        -- use_treesitter = false,
         chars = {
-          horizontal_line = "─",
-          vertical_line = "│",  
-          left_top = "╭",
-          left_bottom = "╰",
-          right_arrow = ">",
+          left_top = "┌",
+          left_bottom = "└",
         },
-        textobject = "",
-        max_file_size = 1024 * 1024,
-        error_sign = true,
         exclude_filetypes = {
           aerial = true,
           dashboard = true,
         },
-        delay = 0,
-        duration = 50,
       },
       indent = {
         enable = true,

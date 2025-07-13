@@ -5,6 +5,7 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.termguicolors = true
 
 -- 全角文字表示設定
 vim.opt.ambiwidth = 'double'
