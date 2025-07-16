@@ -16,12 +16,12 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { import = "plugins.nightfox" },
-    { import = "plugins.treesitter" },
-    { import = "plugins.lualine" },
-    { import = "plugins.barbar" },
+    --{ import = "plugins.treesitter" },
+    --{ import = "plugins.lualine" },
+    --{ import = "plugins.barbar" },
     { import = "plugins.oil" },
     --{ import = "plugins.hlchunk" },
-    { import = "plugins.lsp" },
+    --{ import = "plugins.lsp" },
   }
 })
 
