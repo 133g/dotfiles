@@ -9,16 +9,17 @@
 !/ghostty/config
 !/nvim/
 !/nvim/**
-# lazy.nvim lock file should be ignored
-/nvim/lazy-lock.json
-
-# Claude configuration files with sensitive data
 !/p10k/
 !/p10k/**
-!/sheldon/plugins.toml
+!/sheldon/
+!/sheldon/**
 !/tmux/
 !/tmux/**
+!/zsh/
 !/zsh/**
+
+/nvim/lazy-lock.json
+
 /zsh/.zcompdump
 
 !/README.md
