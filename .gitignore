@@ -19,6 +19,7 @@
 !/tmux/
 !/tmux/**
 !/zsh/**
+/zsh/.zcompdump
 
 !/README.md
 !/LICENSE
