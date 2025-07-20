@@ -75,3 +75,5 @@ export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 # tmux XDG対応 - 設定ファイルパスを指定
 alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/tmux.conf"'
 
+# To customize prompt, run `p10k configure` or edit ~/.config/p10k/p10k.zsh.
+[[ ! -f ~/.config/p10k/p10k.zsh ]] || source ~/.config/p10k/p10k.zsh

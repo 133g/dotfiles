@@ -15,6 +15,7 @@
 !/sheldon/**
 !/tmux/
 !/tmux/**
+/tmux/plugins/**/*
 !/windows-terminal/
 !/windows-terminal/**
 !/zsh/
