@@ -1,4 +1,4 @@
-theme = nordfox
+theme = catppuccin-macchiato
 
 font-family = "Hack Nerd Font Mono"
 font-feature = -dlig
