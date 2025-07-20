@@ -15,9 +15,10 @@ vim.opt.rtp:prepend(lazypath)
 -- load nvim plugins
 require("lazy").setup({
   spec = {
-    { import = "plugins.nightfox" },
+    { import = "plugins.catppuccin" },
+    --{ import = "plugins.nightfox" },
     --{ import = "plugins.treesitter" },
-    --{ import = "plugins.lualine" },
+    { import = "plugins.lualine" },
     --{ import = "plugins.barbar" },
     { import = "plugins.oil" },
     --{ import = "plugins.hlchunk" },
