@@ -21,7 +21,8 @@ require("lazy").setup({
     { import = "plugins.oil" },
     --{ import = "plugins.hlchunk" },
     { import = "plugins.lsp" },
-  }
+    { import = "plugins.copilot" },
+  },
 })
 
 -- add keymap when attached LSP Server only

@@ -40,8 +40,8 @@ return {
       require("mason-null-ls").setup({
         ensure_installed = {
           "stylua", -- Luaフォーマッター
-          "biome", -- JavaScript/TypeScriptフォーマッター・リンター
         },
+        automatic_installation = false,
       })
     end,
   },
@@ -66,6 +66,7 @@ return {
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
           -- <leader>rn: シンボルリネーム（オプション）
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
         end,
       })
 
@@ -144,6 +145,9 @@ return {
       local luasnip = require("luasnip") -- LuaSnipモジュール読み込み（必須）
 
       cmp.setup({
+        performance = {
+          max_view_entries = 10, -- 最大表示数を10に制限
+        },
         -- スニペットエンジン設定（必須）
         snippet = {
           expand = function(args)
@@ -189,6 +193,7 @@ return {
 
         -- 補完ソース設定（優先順位順）（必須）
         sources = cmp.config.sources({
+          { name = "copilot" },
           { name = "nvim_lsp" }, -- LSP補完（最優先）
           { name = "luasnip" }, -- スニペット補完
         }, {
