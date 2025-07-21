@@ -40,7 +40,7 @@ if USE_LAYOUT == '' then
   vim.keymap.set('n', '<leader>k', '<C-w>k', { noremap = true, silent = true })
   vim.keymap.set('n', '<leader>l', '<C-w>l', { noremap = true, silent = true })
 
-  vim.keymap.set('n', '<leader>ws', ':split<CR>', { noremap = true, silent = true })
+  vim.keymap.set('n', '<leader>s', ':split<CR>', { noremap = true, silent = true })
 end
 
 if USE_LAYOUT == 'onishi' then
@@ -58,10 +58,10 @@ if USE_LAYOUT == 'onishi' then
   vim.keymap.set('n', '<leader>s', '<C-w>l', { noremap = true, silent = true })
   vim.keymap.set('n', '<leader>k', '<C-w>h', { noremap = true, silent = true })
   
-  vim.keymap.set('n', '<leader>wl', ':split<CR>', { noremap = true, silent = true })
+  vim.keymap.set('n', '<leader>l', ':split<CR>', { noremap = true, silent = true })
 end
 
-vim.keymap.set('n', '<leader>wv', ':vsplit<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>v', ':vsplit<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>c', ':close<CR>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Save'})
 vim.keymap.set('n', '<leader>q', ':q<CR>', { desc = 'Quit' })
