@@ -20,6 +20,7 @@ require("lazy").setup({
     --{ import = "plugins.barbar" },
     { import = "plugins.oil" },
     --{ import = "plugins.hlchunk" },
+    { import = "plugins.lazygit" },
     { import = "plugins.lsp" },
     { import = "plugins.copilot" },
   },
