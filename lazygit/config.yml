@@ -1,0 +1,6 @@
+gui:
+  mouse: false
+keybinding:
+  universal:
+    nextItem: 't'
+    prevItem: 'n'

@@ -7,6 +7,8 @@
 !/bin/**
 !/ghostty/
 !/ghostty/config
+!/lazygit/
+!/lazygit/config.yml
 !/nvim/
 !/nvim/**
 !/p10k/
