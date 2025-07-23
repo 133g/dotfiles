@@ -1,5 +1,5 @@
-export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:/opt/homebrew/bin
+export PATH=$PATH:$HOME/.local/bin:/opt/homebrew/bin:$HOME/bin
+export PATH=$PATH:$HOME/.local/share/mise/shims
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
