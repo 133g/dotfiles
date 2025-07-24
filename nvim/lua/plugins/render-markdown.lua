@@ -5,5 +5,10 @@ return {
   keys = {
     { "<Space>sm", ":RenderMarkdown toggle<CR>" },
   },
-  opts = {},
+  opts = {
+    render_modes = true,
+    heading = {
+      icons = {},
+    },
+  },
 }
