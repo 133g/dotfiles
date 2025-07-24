@@ -52,16 +52,6 @@ cd ~/.dotfiles
 - **キーマッピング**: 大西配列（k=左、t=下、n=上、s=右）とQWERTY配列の切り替え対応
 - **VSCode統合**: Neovim拡張との連携機能
 
-#### キーマップ切り替え
-
-| コマンド | 機能 |
-|----------|------|
-| `:ToggleKeymap` | 大西配列 ⇔ QWERTY配列のトグル |
-| `:KeymapOnishi` | 大西配列に設定 |
-| `:KeymapQwerty` | QWERTY配列に設定 |
-| `:KeymapStatus` | 現在の配列状態を表示 |
-
-設定は自動的に保存され、次回起動時に復元されます。
 
 ### Zsh
 
@@ -79,59 +69,7 @@ cd ~/.dotfiles
 - **テーマ**: nordfox
 - **XDG対応**: `~/.config/tmux/`に設定配置
 
-### Claude Code
-
-- **Discord通知**: Stop/Notificationイベント時の自動通知
-- **セットアップスクリプト**: Discord Webhook URL設定 + hooks自動設定
-
-Discord通知の詳細なセットアップ手順については [claude/README.md](claude/README.md) を参照してください。
-
 ## カスタマイズ
-
-### Neovimキーマップのカスタマイズ
-
-#### 論理キーマッピング（推奨）
-
-配列に関係なくQWERTY基準で考えてキーマップを追加する方法です：
-
-```lua
--- ~/.config/nvim/lua/config/keymaps.lua
-local km = require('config.keymaps.keymap-manager')
-
--- 上下移動を表示行単位に変更
-km.map('down', 'gj', { desc = 'Move down by display line' })
-km.map('up', 'gk', { desc = 'Move up by display line' })
-
--- リーダーキー使用例
-km.map_leader('w', ':w<CR>', { desc = 'Save file' })
-km.map_leader('q', ':q<CR>', { desc = 'Quit' })
-
--- 複数のマッピングを一括設定
-km.map_bulk({
-  up = '5k',      -- 5行上移動
-  down = '5j',    -- 5行下移動
-  left = 'B',     -- 前の単語（空白区切り）
-  right = 'W'     -- 次の単語（空白区切り）
-}, { desc = 'Fast movement' })
-```
-
-**対応キー**:
-| 論理キー | QWERTY | 大西配列 |
-|---------|--------|---------|
-| `up` | k | n |
-| `down` | j | t |
-| `left` | h | k |
-| `right` | l | s |
-
-**利用可能なAPI**:
-| 関数 | 用途 | 例 |
-|------|------|-----|
-| `km.map(key, target, opts)` | 論理キーマッピング | `km.map('up', 'gk')` |
-| `km.map_leader(key, target, opts)` | リーダーキー | `km.map_leader('w', ':w<CR>')` |
-| `km.map_local_leader(key, target, opts)` | ローカルリーダー | `km.map_local_leader('t', ':TestFile<CR>')` |
-| `km.map_bulk(mappings, opts)` | 一括設定 | `km.map_bulk({up='5k', down='5j'})` |
-
-キーマップシステムの詳細設計や新しい配列の追加方法については、[nvim/lua/config/keymaps/README.md](nvim/lua/config/keymaps/README.md) を参照してください。
 
 #### Neovimプラグインの追加
 

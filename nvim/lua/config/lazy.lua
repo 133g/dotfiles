@@ -23,6 +23,7 @@ require("lazy").setup({
     { import = "plugins.lazygit" },
     { import = "plugins.lsp" },
     { import = "plugins.copilot" },
+    { import = "plugins.render-markdown" },
   },
 })
 
