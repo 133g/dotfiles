@@ -1,4 +1,4 @@
-export PATH=$PATH:$HOME/.local/bin:/opt/homebrew/bin:$HOME/bin
+export PATH=$PATH:$HOME/.local/bin:/opt/homebrew/bin:$HOME/bin:/mnt/c/zenhan/bin
 export PATH=$PATH:$HOME/.local/share/mise/shims
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
