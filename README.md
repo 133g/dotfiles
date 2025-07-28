@@ -49,9 +49,7 @@ cd ~/.dotfiles
 
 - **プラグイン管理**: lazy.nvim
 - **カラーテーマ**: nordfox
-- **キーマッピング**: 大西配列（k=左、t=下、n=上、s=右）とQWERTY配列の切り替え対応
-- **VSCode統合**: Neovim拡張との連携機能
-
+- **キーマッピング**: 大西配列（k=左、t=下、n=上、s=右）
 
 ### Zsh
 
@@ -66,7 +64,6 @@ cd ~/.dotfiles
 ### Tmux
 
 - **キーマッピング**: Neovimと統一（k=左、t=下、n=上、s=右）
-- **テーマ**: nordfox
 - **XDG対応**: `~/.config/tmux/`に設定配置
 
 ## カスタマイズ
