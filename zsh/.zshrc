@@ -33,6 +33,7 @@ setopt auto_cd
 setopt no_beep
 
 # lsコマンドのalias関連
+alias ls='ls -F'
 alias la='ls -la'
 alias ll='ls -lG'
 

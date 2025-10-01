@@ -1,28 +1,29 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-require("config.lazy")
+if not vim.g.vscode then
+  require("config.lazy")
+  vim.cmd.colorscheme("catppuccin")
 
-vim.cmd.colorscheme("catppuccin")
+  -- Basic
+  vim.opt.number = true
+  vim.opt.relativenumber = true
+  vim.opt.cursorline = true
+  vim.opt.wrap = true
+  vim.opt.scrolloff = 10
+  vim.opt.sidescrolloff = 8
+  vim.opt.termguicolors = true
+  vim.opt.encoding = "utf-8"
+  vim.opt.clipboard = "unnamedplus"
 
--- Basic
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.cursorline = true
-vim.opt.wrap = true
-vim.opt.scrolloff = 10
-vim.opt.sidescrolloff = 8
-vim.opt.termguicolors = true
-vim.opt.encoding = "utf-8"
-vim.opt.clipboard = "unnamedplus"
-
--- Indentation
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.smartindent = true
-vim.opt.autoindent = true
+  -- Indentation
+  vim.opt.tabstop = 2
+  vim.opt.softtabstop = 2
+  vim.opt.shiftwidth = 2
+  vim.opt.expandtab = true
+  vim.opt.smartindent = true
+  vim.opt.autoindent = true
+end
 
 -- keymap for onishi
 
@@ -51,22 +52,28 @@ if USE_LAYOUT == "onishi" then
   vim.keymap.set({ "n", "v", "o" }, "l", "s", { noremap = true, silent = true })
   vim.keymap.set({ "n", "v", "o" }, "h", "t", { noremap = true, silent = true })
 
-  vim.keymap.set("n", "<leader>t", "<C-w>j", { noremap = true, silent = true })
-  vim.keymap.set("n", "<leader>n", "<C-w>k", { noremap = true, silent = true })
-  vim.keymap.set("n", "<leader>s", "<C-w>l", { noremap = true, silent = true })
-  vim.keymap.set("n", "<leader>k", "<C-w>h", { noremap = true, silent = true })
+  if not vim.g.vscode then
+    vim.keymap.set("n", "<leader>t", "<C-w>j", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>n", "<C-w>k", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>s", "<C-w>l", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>k", "<C-w>h", { noremap = true, silent = true })
 
-  vim.keymap.set("n", "<leader>l", ":split<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>l", ":split<CR>", { noremap = true, silent = true })
+  end
 end
 
-vim.keymap.set("n", "<leader>v", ":vsplit<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>c", ":close<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save" })
-vim.keymap.set("n", "<leader>q", ":q<CR>", { desc = "Quit" })
+if not vim.g.vscode then
+  vim.keymap.set("n", "<leader>v", ":vsplit<CR>", { noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>c", ":close<CR>", { noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save" })
+  vim.keymap.set("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 
-vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous Buffer" })
-
+  vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next Buffer" })
+  vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous Buffer" })
+else
+  vim.keymap.set("n", "<leader>bn", "<Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>")
+  vim.keymap.set("n", "<leader>bp", "<Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>")
+end
 vim.keymap.set("n", "Y", "y$", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })

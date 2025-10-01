@@ -20,12 +20,9 @@
 /tmux/plugins/**/*
 !/windows-terminal/
 !/windows-terminal/**
-!/zsh/
-!/zsh/**
+!/zsh/.zshrc
 
 /nvim/lazy-lock.json
-
-/zsh/.zcompdump
 
 !/README.md
 !/LICENSE
