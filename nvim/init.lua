@@ -1,6 +1,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.opt.encoding = "utf-8"
+vim.opt.clipboard = "unnamedplus"
+
 if not vim.g.vscode then
   require("config.lazy")
   vim.cmd.colorscheme("catppuccin")
@@ -13,8 +16,6 @@ if not vim.g.vscode then
   vim.opt.scrolloff = 10
   vim.opt.sidescrolloff = 8
   vim.opt.termguicolors = true
-  vim.opt.encoding = "utf-8"
-  vim.opt.clipboard = "unnamedplus"
 
   -- Indentation
   vim.opt.tabstop = 2
