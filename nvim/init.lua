@@ -60,6 +60,14 @@ if USE_LAYOUT == "onishi" then
     vim.keymap.set("n", "<leader>k", "<C-w>h", { noremap = true, silent = true })
 
     vim.keymap.set("n", "<leader>l", ":split<CR>", { noremap = true, silent = true })
+  else
+    -- VS Code window navigation (onishi layout)
+    vim.keymap.set("n", "<leader>t", "<Cmd>call VSCodeNotify('workbench.action.navigateDown')<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>n", "<Cmd>call VSCodeNotify('workbench.action.navigateUp')<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>s", "<Cmd>call VSCodeNotify('workbench.action.navigateRight')<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<leader>k", "<Cmd>call VSCodeNotify('workbench.action.navigateLeft')<CR>", { noremap = true, silent = true })
+
+    vim.keymap.set("n", "<leader>l", "<Cmd>call VSCodeNotify('workbench.action.splitEditorDown')<CR>", { noremap = true, silent = true })
   end
 end
 
@@ -72,6 +80,10 @@ if not vim.g.vscode then
   vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next Buffer" })
   vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous Buffer" })
 else
+  -- VS Code keymaps
+  vim.keymap.set("n", "<leader>v", "<Cmd>call VSCodeNotify('workbench.action.splitEditorRight')<CR>", { noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>w", "<Cmd>call VSCodeNotify('workbench.action.files.save')<CR>", { desc = "Save" })
+  vim.keymap.set("n", "<leader>q", "<Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>", { desc = "Quit" })
   vim.keymap.set("n", "<leader>bn", "<Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>")
   vim.keymap.set("n", "<leader>bp", "<Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>")
 end
