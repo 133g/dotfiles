@@ -1,4 +1,5 @@
-if vim.fn.has("wsl") == 1 then
+if vim.fn.has("wsl") == 1 and not vim.g.vscode then
+	-- WSL terminal Neovim only (VSCode Neovim handles clipboard itself)
 	vim.g.clipboard = {
 		name = "WslClipboard",
 		copy = {
@@ -12,6 +13,7 @@ if vim.fn.has("wsl") == 1 then
 		cache_enabled = 1,
 	}
 elseif vim.fn.has("win32") == 1 then
+	-- Native Windows Neovim (not via WSL)
 	vim.g.clipboard = {
 		name = "Win32Clipboard",
 		copy = {
