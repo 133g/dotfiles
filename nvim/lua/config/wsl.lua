@@ -1,14 +1,16 @@
 if vim.fn.has("wsl") == 1 and not vim.g.vscode then
-	-- WSL terminal Neovim only (VSCode Neovim handles clipboard itself)
+	-- WSL terminal Neovim only (VSCode Neovim handles clipboard itself).
+	-- Must use /mnt/c/ path: PE binaries on the Linux filesystem (/home/...)
+	-- cannot be executed via WSL interop; only Windows-mount paths work.
 	vim.g.clipboard = {
 		name = "WslClipboard",
 		copy = {
-			["+"] = { "win32yank.exe", "-i", "--crlf" },
-			["*"] = { "win32yank.exe", "-i", "--crlf" },
+			["+"] = { "/mnt/c/bin/win32yank.exe", "-i", "--crlf" },
+			["*"] = { "/mnt/c/bin/win32yank.exe", "-i", "--crlf" },
 		},
 		paste = {
-			["+"] = { "win32yank.exe", "-o", "--lf" },
-			["*"] = { "win32yank.exe", "-o", "--lf" },
+			["+"] = { "/mnt/c/bin/win32yank.exe", "-o", "--lf" },
+			["*"] = { "/mnt/c/bin/win32yank.exe", "-o", "--lf" },
 		},
 		cache_enabled = 1,
 	}
