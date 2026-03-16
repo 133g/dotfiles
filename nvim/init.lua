@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.encoding = "utf-8"
+require("config.wsl")
 vim.opt.clipboard = "unnamedplus"
 
 if not vim.g.vscode then
@@ -94,4 +95,3 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
 
 require("config.ime")
-require("config.wsl")
