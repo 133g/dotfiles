@@ -1,5 +1,10 @@
 export PATH=$PATH:$HOME/.local/bin:/opt/homebrew/bin:$HOME/bin:/mnt/c/zenhan/bin
 export PATH=$PATH:$HOME/.local/share/mise/shims
+if command -v nvim &>/dev/null; then
+  export EDITOR=nvim
+else
+  export EDITOR=vim
+fi
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -42,9 +47,13 @@ alias c='clear'
 alias cc='c &&'
 
 # neovimコマンドのalias関連
-alias vi="nvim"
-alias vim="nvim"
-alias view="nvim -R"
+if command -v nvim &>/dev/null; then
+  alias vi="nvim"
+  alias vim="nvim"
+  alias view="nvim -R"
+else
+  alias view="vim -R"
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/p10k/p10k.zsh.
 [[ ! -f "${XDG_CONFIG_HOME}/p10k/p10k.zsh" ]] || source "${XDG_CONFIG_HOME}/p10k/p10k.zsh"
