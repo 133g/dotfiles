@@ -1,5 +1,13 @@
-export PATH=$PATH:$HOME/.local/bin:/opt/homebrew/bin:$HOME/bin:/mnt/c/zenhan/bin
-export PATH=$PATH:$HOME/.local/share/mise/shims
+# PATH の重複を自動排除（zsh の path 配列はユニーク保持）
+typeset -U path
+
+path+=("$HOME/.local/bin" "$HOME/bin" "$HOME/.local/share/mise/shims")
+
+# WSL2 固有パス
+if grep -qi microsoft /proc/version 2>/dev/null; then
+  path+=(/mnt/c/zenhan/bin)
+fi
+
 if command -v nvim &>/dev/null; then
   export EDITOR=nvim
 else
@@ -9,12 +17,16 @@ fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose  # または quiet
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose  # または quiet
 eval "$(SHELDON_LOG=error sheldon source)"       # 出力を suppress
+
+# viins モードで Ctrl+E が end-of-line を呼ぶように明示的に設定
+# (zsh-autosuggestions は end-of-line widget をラップして補完を受け付けるため)
+bindkey -M viins '^E' end-of-line
 
 #################################  HISTORY  #################################
 # history
@@ -85,5 +97,3 @@ export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 # tmux XDG対応 - 設定ファイルパスを指定
 alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/tmux.conf"'
 
-# To customize prompt, run `p10k configure` or edit ~/.config/p10k/p10k.zsh.
-[[ ! -f ~/.config/p10k/p10k.zsh ]] || source ~/.config/p10k/p10k.zsh

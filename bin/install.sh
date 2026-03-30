@@ -248,7 +248,8 @@ link_to_homedir() {
   local zshenv_content="# XDG Base Directory準拠のzsh設定
 export XDG_CONFIG_HOME=\"\${XDG_CONFIG_HOME:-\$HOME/.config}\"
 export ZDOTDIR=\"\${XDG_CONFIG_HOME}/zsh\"
-[ -f \"\$ZDOTDIR/.zshrc\" ] && source \"\$ZDOTDIR/.zshrc\""
+# ZDOTDIR を設定すれば zsh が自動的に \$ZDOTDIR/.zshrc を source するため、
+# ここで手動 source は不要（2重実行を防ぐ）"
   
   local zshenv_path="$HOME/.zshenv"
   if [ ! -f "$zshenv_path" ] || ! grep -q "ZDOTDIR" "$zshenv_path"; then

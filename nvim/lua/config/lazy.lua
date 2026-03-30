@@ -15,15 +15,6 @@ vim.opt.rtp:prepend(lazypath)
 -- load nvim plugins
 require("lazy").setup({
   spec = {
-    --{ import = "plugins.catppuccin" },
-    --{ import = "plugins.lualine" },
-    --{ import = "plugins.barbar" },
-    --{ import = "plugins.oil" },
-    --{ import = "plugins.hlchunk" },
-    --{ import = "plugins.lazygit" },
-    --{ import = "plugins.lsp" },
-    --{ import = "plugins.copilot" },
-    --{ import = "plugins.render-markdown" },
     { import = "plugins" },
   },
 })

@@ -20,14 +20,14 @@ setup_wsl2_configs() {
   # tmux設定にWSL2のクリップボード統合を追加
   local tmux_conf="$dotdir/tmux/tmux.conf"
   if [ -f "$tmux_conf" ]; then
-    if ! grep -q "clip.exe" "$tmux_conf"; then
+    if ! grep -q "win32yank.exe" "$tmux_conf"; then
       print_info "tmux設定にWSL2クリップボード統合を追加"
       cat >> "$tmux_conf" << 'EOF'
 
 # WSL2固有の設定
 # クリップボード統合（WSL2でのみ有効）
 if-shell 'test -f /proc/version && grep -qi microsoft /proc/version' \
-  'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"'
+  'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "win32yank.exe -i"'
 
 EOF
       print_success "WSL2クリップボード統合を追加しました"
@@ -36,35 +36,7 @@ EOF
     fi
   fi
 
-  # nvim設定にWSL2クリップボード設定を追加
-  local nvim_init="$dotdir/nvim/init.lua"
-  if [ -f "$nvim_init" ]; then
-    if ! grep -q "WSL2.*clipboard" "$nvim_init"; then
-      print_info "nvim設定にWSL2クリップボード設定を追加"
-      cat >> "$nvim_init" << 'EOF'
-
--- WSL2固有の設定
-if vim.fn.has('wsl') == 1 then
-  vim.g.clipboard = {
-    name = 'WslClipboard',
-    copy = {
-      ['+'] = 'clip.exe',
-      ['*'] = 'clip.exe',
-    },
-    paste = {
-      ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-      ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    },
-    cache_enabled = 0,
-  }
-end
-
-EOF
-      print_success "WSL2クリップボード設定を追加しました"
-    else
-      print_info "WSL2クリップボード設定は既に追加済みです"
-    fi
-  fi
+  # nvim のクリップボード設定は nvim/lua/config/wsl.lua で win32yank.exe を使って管理済み
 
   print_success "✅ WSL2固有の設定が完了しました"
 }

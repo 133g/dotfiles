@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 windowsUserProfile=/mnt/c/Users/$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
 
