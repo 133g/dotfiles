@@ -97,3 +97,4 @@ fi
 # tmux XDG対応 - 設定ファイルパスを指定
 alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/tmux.conf"'
 
+
