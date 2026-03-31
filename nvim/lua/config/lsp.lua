@@ -52,6 +52,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "Show diagnostics" })
 
+    -- 0.11 デフォルトの grn (rename) を無効化 — <leader>rn を使用、grn は Treesitter に譲る
+    vim.keymap.del("n", "grn", { buffer = buf })
+
     -- インレイヒント（推論型のインライン表示）トグル
     if client:supports_method("textDocument/inlayHint") then
       vim.keymap.set("n", "<leader>ih", function()
