@@ -1,3 +1,7 @@
+# XDG Base Directory対応
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+
 # PATH の重複を自動排除（zsh の path 配列はユニーク保持）
 typeset -U path
 
@@ -70,7 +74,7 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.config/p10k/p10k.zsh.
 [[ ! -f "${XDG_CONFIG_HOME}/p10k/p10k.zsh" ]] || source "${XDG_CONFIG_HOME}/p10k/p10k.zsh"
 
-# setting for linux(WSL)
+# setting for Linux (WSL2含む)
 if [[ "$(uname)" == "Linux" ]]; then
   # Homebrewのパスを動的に検出
   local brew_path="/home/linuxbrew/.linuxbrew/bin/brew"
@@ -89,10 +93,6 @@ fi
 if [[ "$(uname)" == "Darwin" ]]; then
   eval "$(/opt/homebrew/bin/mise activate zsh)"
 fi
-
-# XDG Base Directory対応
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
 # tmux XDG対応 - 設定ファイルパスを指定
 alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/tmux.conf"'

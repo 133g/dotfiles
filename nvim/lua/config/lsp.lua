@@ -1,9 +1,9 @@
 vim.lsp.enable({
-  -- nvim-lspconfig で"lua_ls"という名前で設定したプリセットが読まれる
-  -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/lua_ls.lua
+  -- nvim-lspconfig で設定したプリセットが読まれる
+  -- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/
   "lua_ls",
-  -- 他の言語サーバーの設定
-  -- "gopls",
+  "ts_ls",
+  "biome",
 })
 
 -- 言語サーバーがアタッチされた時に呼ばれる
@@ -15,7 +15,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     -- デフォルトで設定されている言語サーバー用キーバインドに設定を追加する
     -- See https://neovim.io/doc/user/lsp.html#lsp-defaults
-    -- 言語サーバーのクライアントがLSPで定められた機能を実装していたら設定を追加するという流れ
 
     if client:supports_method("textDocument/definition") then
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
@@ -27,11 +26,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end, { buffer = buf, desc = "Show hover documentation" })
     end
 
+    if client:supports_method("textDocument/codeAction") then
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = buf, desc = "Code action" })
+    end
+
+    if client:supports_method("textDocument/rename") then
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = buf, desc = "Rename symbol" })
+    end
+
+    vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "Show diagnostics" })
+
     if client:supports_method("textDocument/completion") then
       vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
     end
 
-    -- Auto-format ("lint") on save.
+    -- Auto-format on save.
     -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
     if
         not client:supports_method("textDocument/willSaveWaitUntil")
@@ -47,3 +56,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
+
+-- stylua による Lua ファイルの自動フォーマット（LSP外のフォーマッター）
+if vim.fn.executable("stylua") == 1 then
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = vim.api.nvim_create_augroup("my.stylua", {}),
+    pattern = "*.lua",
+    callback = function(args)
+      local filepath = vim.api.nvim_buf_get_name(args.buf)
+      vim.fn.system({ "stylua", filepath })
+      vim.cmd.edit({ bang = true })
+    end,
+  })
+end

@@ -24,6 +24,7 @@
 
 /nvim/lazy-lock.json
 
+!/AGENTS.md
 !/README.md
 !/LICENSE
 !.gitignore
