@@ -26,6 +26,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end, { buffer = buf, desc = "Show hover documentation" })
     end
 
+    if client:supports_method("textDocument/references") then
+      vim.keymap.set("n", "grr", vim.lsp.buf.references, { buffer = buf, desc = "Find references" })
+    end
+
+    if client:supports_method("textDocument/typeDefinition") then
+      vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { buffer = buf, desc = "Go to type definition" })
+    end
+
+    if client:supports_method("textDocument/implementation") then
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = buf, desc = "Go to implementation" })
+    end
+
+    if client:supports_method("textDocument/signatureHelp") then
+      vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, { buffer = buf, desc = "Signature help" })
+    end
+
     if client:supports_method("textDocument/codeAction") then
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = buf, desc = "Code action" })
     end
@@ -35,6 +51,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { buffer = buf, desc = "Show diagnostics" })
+
+    -- インレイヒント（推論型のインライン表示）トグル
+    if client:supports_method("textDocument/inlayHint") then
+      vim.keymap.set("n", "<leader>ih", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }), { bufnr = buf })
+      end, { buffer = buf, desc = "Toggle inlay hints" })
+    end
 
     if client:supports_method("textDocument/completion") then
       vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
