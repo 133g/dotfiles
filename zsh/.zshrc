@@ -7,6 +7,11 @@ typeset -U path
 
 path+=("$HOME/.local/bin" "$HOME/bin" "$HOME/.local/share/mise/shims")
 
+# macOS: Homebrew パスを早期に追加（sheldon 等の Homebrew ツールより前に必要）
+if [[ "$(uname)" == "Darwin" ]]; then
+  path+=(/opt/homebrew/bin /opt/homebrew/sbin)
+fi
+
 # WSL2 固有パス
 if grep -qi microsoft /proc/version 2>/dev/null; then
   path+=(/mnt/c/zenhan/bin)
